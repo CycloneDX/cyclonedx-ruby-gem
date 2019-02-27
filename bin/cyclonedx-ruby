@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require 'bom_builder'
+Bombuilder.build(ARGV[0])
