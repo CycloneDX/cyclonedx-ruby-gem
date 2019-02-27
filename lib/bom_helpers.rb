@@ -15,7 +15,7 @@ def build_bom(gems)
                         xml.hashes{
                             xml.hash_ gem["hash"], :alg => "SHA-256"
                         }
-                        if gem.license
+                        if gem["license"]
                             xml.licenses {
                                 xml.license{
                                     xml.id gem["license"]
