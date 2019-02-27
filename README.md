@@ -8,7 +8,7 @@ gem build cyclonedx-ruby.gemspec
 gem install cyclonedx-ruby-1.0.0.gem 
 
 ## usage
-bom_builder [PATH_TO_PROJECT]
+cyclonedx-ruby [PATH_TO_PROJECT]
 
 **Output:** bom.xml file in project directory
 
