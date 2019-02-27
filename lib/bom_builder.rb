@@ -32,22 +32,25 @@ class Bombuilder
 
     end
     def self.specs_list
-        @specs.each do |dependency|
-            puts @licenses
-            object = OpenStruct.new
-            object.name = dependency.name 
-            object.version = dependency.version 
-            object.purl = purl(object.name, object.version)
-            gem = get_gem(object.name, object.version)
-            next if gem.nil?
-            if gem["licenses"] and @licenses_list.include? gem["licenses"].first
-                object.license = gem["licenses"].first
-            end
-            object.author = gem["authors"]
-            object.description = gem["summary"] 
-            object.hash = gem["sha"]
-            @gems.push(object)
-            puts "#{object.name}:#{object.version} gem added"
+      count = 0
+      @specs.each do |dependency|
+        puts @licenses
+        object = OpenStruct.new
+        object.name = dependency.name 
+        object.version = dependency.version 
+        object.purl = purl(object.name, object.version)
+        gem = get_gem(object.name, object.version)
+        next if gem.nil?
+        if gem["licenses"] and @licenses_list.include? gem["licenses"].first
+          object.license = gem["licenses"].first
         end
+        object.author = gem["authors"]
+        object.description = gem["summary"] 
+        object.hash = gem["sha"]
+        @gems.push(object)
+        count += 1
+        puts "#{object.name}:#{object.version} gem added"
+      end
+      puts "#{count} gems were added"
     end 
 end
