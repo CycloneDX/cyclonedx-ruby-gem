@@ -15,10 +15,16 @@ def build_bom(gems)
             xml.hashes{
               xml.hash_ gem["hash"], :alg => "SHA-256"
             }
-            if gem["license"]
+            if gem["license_id"]
               xml.licenses {
                 xml.license{
-                  xml.id gem["license"]
+                  xml.id gem["license_id"]
+                }
+              } 
+            elsif gem["license_name"]
+              xml.licenses {
+                xml.license{
+                  xml.name gem["license_name"]
                 }
               }
             end

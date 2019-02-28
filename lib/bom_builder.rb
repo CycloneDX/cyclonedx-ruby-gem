@@ -38,9 +38,15 @@ class Bombuilder
       object.purl = purl(object.name, object.version)
       gem = get_gem(object.name, object.version)
       next if gem.nil?
-      if gem["licenses"] and @licenses_list.include? gem["licenses"].first
-        object.license = gem["licenses"].first
+      
+      if gem["licenses"] and gem["licenses"].length > 0
+        if @licenses_list.include? gem["licenses"].first
+          object.license_id = gem["licenses"].first
+        else
+          object.license_name = gem["licenses"].first
+        end
       end
+
       object.author = gem["authors"]
       object.description = gem["summary"] 
       object.hash = gem["sha"]
