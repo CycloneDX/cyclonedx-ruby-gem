@@ -3,6 +3,16 @@
 [![Website](https://img.shields.io/badge/https://-cyclonedx.org-blue.svg)](https://cyclonedx.org/)
 [![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Follow)](https://twitter.com/CycloneDX_Spec)
 
+## build and install gem
+gem build cyclonedx-ruby.gemspec
+
+gem install cyclonedx-ruby-1.0.0.gem 
+
+## usage
+cyclonedx-ruby [PATH_TO_PROJECT]
+
+**Output:** bom.xml file in project directory
+
 CycloneDX Ruby Gem
 =========
 
