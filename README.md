@@ -5,6 +5,7 @@
 
 ## build and install gem
 gem build cyclonedx-ruby.gemspec
+
 gem install cyclonedx-ruby-1.0.0.gem 
 
 ## usage
