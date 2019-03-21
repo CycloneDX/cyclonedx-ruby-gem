@@ -12,8 +12,11 @@ gem install cyclonedx-ruby-1.0.1.gem
 usage
 =========
 cyclonedx-ruby [options]
+
     `-v, --[no-]verbose` Run verbosely
+
     `-p, --path path` Path to ROR project directory
+
     `-h, --help` Show help message
 
 **Output:** bom.xml file in project directory
