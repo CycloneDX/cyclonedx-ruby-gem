@@ -3,13 +3,18 @@
 [![Website](https://img.shields.io/badge/https://-cyclonedx.org-blue.svg)](https://cyclonedx.org/)
 [![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Follow)](https://twitter.com/CycloneDX_Spec)
 
-## build and install gem
+build and install gem
+=========
 gem build cyclonedx-ruby.gemspec
 
-gem install cyclonedx-ruby-1.0.0.gem 
+gem install cyclonedx-ruby-1.0.1.gem 
 
-## usage
-cyclonedx-ruby [PATH_TO_PROJECT]
+usage
+=========
+cyclonedx-ruby [options]
+    `-v, --[no-]verbose` Run verbosely
+    `-p, --path path` Path to ROR project directory
+    `-h, --help` Show help message
 
 **Output:** bom.xml file in project directory
 
