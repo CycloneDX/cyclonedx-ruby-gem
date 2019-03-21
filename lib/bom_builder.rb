@@ -3,10 +3,12 @@ require "nokogiri"
 require "ostruct"
 require "json"
 require "rest_client"
+require "optparse"
 require_relative "bom_helpers"
 
 class Bombuilder
   def self.build(path)
+
     setup(path)
     specs_list
     bom = build_bom(@gems)
@@ -14,13 +16,26 @@ class Bombuilder
   end
   private
   def self.setup(path)
+    options = {}
+    OptionParser.new do |opts|
+      opts.banner = "Usage: example.rb [options]"
+    
+      opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
+        options[:verbose] = v
+      end
+      opts.on("-p", "--path path", "Path") do |path|
+        options[:path] = path
+      end 
+    end.parse!
+    puts options
+
     @gems = []
     licenses_file = File.read "lib/licenses.json"
     @licenses_list = JSON.parse(licenses_file)
     abort("missing path to project directory") if path.nil?
     
     begin
-      Dir.chdir path
+      Dir.chdir options[:path]
       gemfile = File.read("Gemfile.lock")
       @specs = Bundler::LockfileParser.new(gemfile).specs
     rescue 
