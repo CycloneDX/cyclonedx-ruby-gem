@@ -4,6 +4,7 @@ require "ostruct"
 require "json"
 require "rest_client"
 require "optparse"
+require "logger"
 require_relative "bom_helpers"
 
 class Bombuilder
@@ -16,37 +17,47 @@ class Bombuilder
   end
   private
   def self.setup(path)
-    options = {}
+    @options = {}
     OptionParser.new do |opts|
       opts.banner = "Usage: example.rb [options]"
     
       opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
-        options[:verbose] = v
+        @options[:verbose] = v
       end
       opts.on("-p", "--path path", "Path") do |path|
-        options[:path] = path
+        @options[:path] = path
       end 
     end.parse!
-    puts options
+
+    @logger = Logger.new(STDOUT)
+    if @options[:verbose]
+      @logger.level = Logger::INFO
+    else
+      @logger.level = Logger::ERROR
+    end
 
     @gems = []
     licenses_file = File.read "lib/licenses.json"
     @licenses_list = JSON.parse(licenses_file)
-    abort("missing path to project directory") if path.nil?
-    
+
+    if @options[:path].nil?
+      @logger.error("missing path to project directory")
+      abort
+    end
+
     begin
-      Dir.chdir options[:path]
+      Dir.chdir @options[:path]
       gemfile = File.read("Gemfile.lock")
       @specs = Bundler::LockfileParser.new(gemfile).specs
     rescue 
-      abort "Input argument should refer to a valid Ruby on Rails project folder"
+      @logger.error("Input argument should refer to a valid Ruby on Rails project folder")
+      abort
     end
   end
   
   def self.specs_list
     count = 0
     @specs.each do |dependency|
-      puts @licenses
       object = OpenStruct.new
       object.name = dependency.name 
       object.version = dependency.version 
@@ -67,8 +78,8 @@ class Bombuilder
       object.hash = gem["sha"]
       @gems.push(object)
       count += 1
-      puts "#{object.name}:#{object.version} gem added"
+      @logger.info("#{object.name}:#{object.version} gem added")
     end
-    puts "#{count} gems were added"
+    @logger.info("#{count} gems were added to #{@options[:path]}/bom.xml")
   end 
 end
