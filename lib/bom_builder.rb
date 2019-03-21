@@ -19,14 +19,18 @@ class Bombuilder
   def self.setup(path)
     @options = {}
     OptionParser.new do |opts|
-      opts.banner = "Usage: example.rb [options]"
+      opts.banner = "Usage: cyclonedx-ruby [options]"
     
       opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
         @options[:verbose] = v
       end
-      opts.on("-p", "--path path", "Path") do |path|
+      opts.on("-p", "--path path", "Path to ROR project directory") do |path|
         @options[:path] = path
       end 
+      opts.on_tail("-h", "--help", "Show help message") do
+        puts opts
+        exit
+      end
     end.parse!
 
     @logger = Logger.new(STDOUT)
