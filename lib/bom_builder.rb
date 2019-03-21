@@ -84,6 +84,10 @@ class Bombuilder
       count += 1
       @logger.info("#{object.name}:#{object.version} gem added")
     end
-    @logger.info("#{count} gems were added to #{@options[:path]}/bom.xml")
+    if option[:verbose]
+      @logger.info("#{count} gems were added to #{@options[:path]}/bom.xml")
+    else
+      puts "#{count} gems were added to #{@options[:path]}/bom.xml"
+    end
   end 
 end
