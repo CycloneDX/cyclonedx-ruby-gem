@@ -3,10 +3,13 @@ require "nokogiri"
 require "ostruct"
 require "json"
 require "rest_client"
+require "optparse"
+require "logger"
 require_relative "bom_helpers"
 
 class Bombuilder
   def self.build(path)
+
     setup(path)
     specs_list
     bom = build_bom(@gems)
@@ -14,24 +17,51 @@ class Bombuilder
   end
   private
   def self.setup(path)
+    @options = {}
+    OptionParser.new do |opts|
+      opts.banner = "Usage: cyclonedx-ruby [options]"
+    
+      opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
+        @options[:verbose] = v
+      end
+      opts.on("-p", "--path path", "Path to ROR project directory") do |path|
+        @options[:path] = path
+      end 
+      opts.on_tail("-h", "--help", "Show help message") do
+        puts opts
+        exit
+      end
+    end.parse!
+
+    @logger = Logger.new(STDOUT)
+    if @options[:verbose]
+      @logger.level = Logger::INFO
+    else
+      @logger.level = Logger::ERROR
+    end
+
     @gems = []
     licenses_file = File.read "lib/licenses.json"
     @licenses_list = JSON.parse(licenses_file)
-    abort("missing path to project directory") if path.nil?
-    
+
+    if @options[:path].nil?
+      @logger.error("missing path to project directory")
+      abort
+    end
+
     begin
-      Dir.chdir path
+      Dir.chdir @options[:path]
       gemfile = File.read("Gemfile.lock")
       @specs = Bundler::LockfileParser.new(gemfile).specs
     rescue 
-      abort "Input argument should refer to a valid Ruby on Rails project folder"
+      @logger.error("Input argument should refer to a valid Ruby on Rails project folder")
+      abort
     end
   end
   
   def self.specs_list
     count = 0
     @specs.each do |dependency|
-      puts @licenses
       object = OpenStruct.new
       object.name = dependency.name 
       object.version = dependency.version 
@@ -52,8 +82,12 @@ class Bombuilder
       object.hash = gem["sha"]
       @gems.push(object)
       count += 1
-      puts "#{object.name}:#{object.version} gem added"
+      @logger.info("#{object.name}:#{object.version} gem added")
     end
-    puts "#{count} gems were added"
+    if option[:verbose]
+      @logger.info("#{count} gems were added to #{@options[:path]}/bom.xml")
+    else
+      puts "#{count} gems were added to #{@options[:path]}/bom.xml"
+    end
   end 
 end

@@ -45,6 +45,7 @@ def get_gem(name, version)
     body = JSON.parse(response.body)
     body.select {|item| item["number"] == version.to_s}.first
   rescue 
+    @logger.warn("#{name} couldn't be fetched")
     return nil
   end
 end 
