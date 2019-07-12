@@ -10,9 +10,9 @@ Gem::Specification.new do |s|
   s.homepage    = "http://rubygems.org/gems/cyclonedx-ruby" 
   s.license       = "Apache-2.0"
   s.executables << "cyclonedx-ruby"
-  s.add_runtime_dependency 'nokogiri', '~> 1.10', '>= 1.10.3'
-  s.add_runtime_dependency 'ostruct', '~> 0.1.0'
-  s.add_runtime_dependency 'json', '~> 2.2'
-  s.add_runtime_dependency 'rest-client', '~> 2.0', '>= 2.0.2'
-  s.add_runtime_dependency 'logger', '~> 1.3'
+  s.add_dependency('bundler') # TODO: is there a min/max version of bundler we can specify? open-ended dependencies are not recommended...
+  s.add_dependency('json', '~> 2.2')
+  s.add_dependency('nokogiri', '~> 1.8')
+  s.add_dependency('ostruct', '~> 0.1')
+  s.add_dependency('rest-client', '~> 2.0')
 end

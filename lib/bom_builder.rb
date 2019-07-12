@@ -1,19 +1,49 @@
 require "bundler"
-require "nokogiri"
-require "ostruct"
+require "fileutils"
 require "json"
-require "rest_client"
-require "optparse"
 require "logger"
+require "nokogiri"
+require "optparse"
+require "ostruct"
+require "rest_client"
 require_relative "bom_helpers"
 
 class Bombuilder
   def self.build(path)
-
+    original_working_directory = Dir.pwd
     setup(path)
     specs_list
     bom = build_bom(@gems)
-    File.open("bom.xml", "w") {|file| file.write(bom)}
+
+    begin
+      @logger.info("Changing directory to the original working directory located at #{original_working_directory}")
+      Dir.chdir original_working_directory
+    rescue => e
+      @logger.error("Unable to change directory the original working directory located at #{original_working_directory}. #{e.message}: #{e.backtrace.join('\n')}")
+      abort
+    end
+
+    bom_directory = File.dirname(@bom_file_path)
+    begin
+      FileUtils.mkdir_p(bom_directory) unless File.directory?(bom_directory)
+    rescue => e
+      @logger.error("Unable to create the directory to hold the BOM output at #{@bom_directory}. #{e.message}: #{e.backtrace.join('\n')}")
+      abort
+    end
+
+    begin
+      @logger.info("Writing BOM to #{@bom_file_path}...")
+      File.open(@bom_file_path, "w") {|file| file.write(bom)}
+
+      if @options[:verbose]
+        @logger.info("#{@gems.size} gems were written to BOM located at #{@bom_file_path}")
+      else
+        puts "#{@gems.size} gems were written to BOM located at #{@bom_file_path}"
+      end
+    rescue => e
+      @logger.error("Unable to write BOM to #{@bom_file_path}. #{e.message}: #{e.backtrace.join('\n')}")
+      abort
+    end
   end
   private
   def self.setup(path)
@@ -24,9 +54,12 @@ class Bombuilder
       opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
         @options[:verbose] = v
       end
-      opts.on("-p", "--path path", "Path to ROR project directory") do |path|
+      opts.on("-p", "--path path", "(Required) Path to ROR project directory") do |path|
         @options[:path] = path
-      end 
+      end
+      opts.on("-o", "--output bom_file_path", "(Optional) Path to output the bom.xml file to") do |bom_file_path|
+        @options[:bom_file_path] = bom_file_path
+      end
       opts.on_tail("-h", "--help", "Show help message") do
         puts opts
         exit
@@ -49,12 +82,35 @@ class Bombuilder
       abort
     end
 
+    if !File.directory?(@options[:path])
+      @logger.error("path provided is not a valid directory. path provided was: #{@options[:path]}")
+      abort
+    end
+
     begin
+      @logger.info("Changing directory to Ruby project directory located at #{@options[:path]}")
       Dir.chdir @options[:path]
-      gemfile = File.read("Gemfile.lock")
-      @specs = Bundler::LockfileParser.new(gemfile).specs
-    rescue 
-      @logger.error("Input argument should refer to a valid Ruby on Rails project folder")
+    rescue => e
+      @logger.error("Unable to change directory to Ruby project directory located at #{@options[:path]}. #{e.message}: #{e.backtrace.join('\n')}")
+      abort
+    end
+
+    if @options[:bom_file_path].nil?
+      @bom_file_path = "./bom.xml"
+    else
+      @bom_file_path = @options[:bom_file_path]
+    end
+
+    @logger.info("BOM will be written to #{@bom_file_path}")
+
+    begin
+      gemfile_path = @options[:path] + "/" + "Gemfile.lock"
+      @logger.info("Parsing specs from #{gemfile_path}...")
+      gemfile_contents = File.read(gemfile_path)
+      @specs = Bundler::LockfileParser.new(gemfile_contents).specs
+      @logger.info("Specs successfully parsed!")
+    rescue => e
+      @logger.error("Unable to parse specs from #{gemfile_path}. #{e.message}: #{e.backtrace.join('\n')}")
       abort
     end
   end
@@ -83,11 +139,6 @@ class Bombuilder
       @gems.push(object)
       count += 1
       @logger.info("#{object.name}:#{object.version} gem added")
-    end
-    if @options[:verbose]
-      @logger.info("#{count} gems were added to #{@options[:path]}/bom.xml")
-    else
-      puts "#{count} gems were added to #{@options[:path]}/bom.xml"
     end
   end 
 end
