@@ -6,6 +6,7 @@ require "nokogiri"
 require "optparse"
 require "ostruct"
 require "rest_client"
+require 'securerandom'
 require_relative "bom_helpers"
 
 class Bombuilder
@@ -54,7 +55,7 @@ class Bombuilder
       opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
         @options[:verbose] = v
       end
-      opts.on("-p", "--path path", "(Required) Path to ROR project directory") do |path|
+      opts.on("-p", "--path path", "(Required) Path to Ruby project directory") do |path|
         @options[:path] = path
       end
       opts.on("-o", "--output bom_file_path", "(Optional) Path to output the bom.xml file to") do |bom_file_path|

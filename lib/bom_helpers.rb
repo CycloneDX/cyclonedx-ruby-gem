@@ -2,9 +2,13 @@ def purl(name, version)
     purl = "pkg:gem/" + name + "@" + version.to_s
 end
 
+def random_urn_uuid()
+  random_urn_uuid = "urn:uuid:" + SecureRandom.uuid
+end
+
 def build_bom(gems)
   builder = Nokogiri::XML::Builder.new(:encoding => "UTF-8") do |xml|
-    attributes = {"xmlns" => "http://cyclonedx.org/schema/bom/1.0","xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "version" => "1", "xsi:schemaLocation" => "http://cyclonedx.org/schema/bom/1.0 http://cyclonedx.org/schema/bom/1.0"}
+    attributes = {"xmlns" => "http://cyclonedx.org/schema/bom/1.1", "version" => "1", "serialNumber" => random_urn_uuid}
     xml.bom(attributes) do
       xml.components {
         gems.each do |gem|
@@ -29,7 +33,6 @@ def build_bom(gems)
               }
             end
             xml.purl gem["purl"]
-            xml.modified "false" 
           }
         end
       }
