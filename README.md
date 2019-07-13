@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/CycloneDX/cyclonedx-ruby-gem.svg?branch=master)](https://travis-ci.org/CycloneDX/cyclonedx-ruby-gem)
+[![Gem Version](https://badge.fury.io/rb/cyclonedx-ruby.svg)](https://badge.fury.io/rb/cyclonedx-ruby)
 [![License](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)][License]
 [![Website](https://img.shields.io/badge/https://-cyclonedx.org-blue.svg)](https://cyclonedx.org/)
 [![Group Discussion](https://img.shields.io/badge/discussion-groups.io-blue.svg)](https://groups.io/g/CycloneDX)
