@@ -13,15 +13,14 @@ with tools such as [OWASP Dependency-Track](https://dependencytrack.org/) for th
 #### Installing from RubyGem
 
 ```bash
-gem build cyclonedx-ruby.gemspec
-gem install cyclonedx-ruby-1.1.0.gem 
+gem install cyclonedx-ruby 
 ```
 
 #### Building and Installing From Source
 
 ```bash
 gem build cyclonedx-ruby.gemspec
-gem install cyclonedx-ruby-1.1.0.gem 
+gem install cyclonedx-ruby-x.x.x.gem 
 ```
 
 #### Usage
