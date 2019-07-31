@@ -11,7 +11,8 @@ Gem::Specification.new do |spec|
   spec.license     = "Apache-2.0"
   spec.executables << "cyclonedx-ruby"
   spec.add_dependency('json', '~> 2.2')
-  spec.add_dependency('nokogiri', '~> 1.8')
+  spec.add_dependency('rexml', '~> 3.2')
+  spec.add_dependency('bundler', '~> 1.17')
   spec.add_dependency('rest-client', '~> 2.0')
   spec.add_development_dependency 'rake', '~> 12'
   spec.add_development_dependency 'rspec', '~> 3.7'
