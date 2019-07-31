@@ -12,7 +12,6 @@ Gem::Specification.new do |spec|
   spec.executables << "cyclonedx-ruby"
   spec.add_dependency('json', '~> 2.2')
   spec.add_dependency('nokogiri', '~> 1.8')
-  spec.add_dependency('ostruct', '~> 0.1')
   spec.add_dependency('rest-client', '~> 2.0')
   spec.add_development_dependency 'rake', '~> 12'
   spec.add_development_dependency 'rspec', '~> 3.7'
