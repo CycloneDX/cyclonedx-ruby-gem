@@ -53,12 +53,24 @@ end
 
 def get_gem(name, version)
   url = "https://rubygems.org/api/v1/versions/#{name}.json"
+  max_retries = 3
+  retry_count = 0
+  delay = 1
+
   begin
     response = RestClient.get(url)
     body = JSON.parse(response.body)
-    body.select {|item| item["number"] == version.to_s}.first
-  rescue 
-    @logger.warn("#{name} couldn't be fetched")
-    return nil
+    gem_details = body.select {|item| item["number"] == version.to_s}.first
+    return gem_details if gem_details
+  rescue => e
+    if max_retries > retry_count
+        @logger.warn("gem #{name} could NOT be fetched. Error was: #{e.message}. Retrying #{max_retries - retry_count} more time(s)...")
+        sleep delay + retry_count
+        retry_count += 1
+        retry
+    else
+        @logger.warn("gem #{name} could NOT be fetched. Error was: #{e.message}. Gave up after retrying #{max_retries} times!")
+        return nil
+    end
   end
-end 
+end
