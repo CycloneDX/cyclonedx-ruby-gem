@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/CycloneDX/cyclonedx-ruby-gem.svg?branch=master)](https://travis-ci.org/CycloneDX/cyclonedx-ruby-gem)
+[![Build Status](https://github.com/CycloneDX/cyclonedx-ruby-gem/workflows/Ruby%20CI/badge.svg)](https://github.com/CycloneDX/cyclonedx-ruby-gem/actions?workflow=Ruby+CI)
 [![Gem Version](https://badge.fury.io/rb/cyclonedx-ruby.svg)](https://badge.fury.io/rb/cyclonedx-ruby)
 [![License](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)][License]
 [![Website](https://img.shields.io/badge/https://-cyclonedx.org-blue.svg)](https://cyclonedx.org/)
@@ -8,8 +8,7 @@
 
 # CycloneDX Ruby Gem
 
-The CycloneDX Ruby Gem creates a valid CycloneDX bill-of-material document from all project dependencies. CycloneDX is a lightweight BoM specification that is easily created, human readable, and simple to parse. The resulting bom.xml can be used
-with tools such as [OWASP Dependency-Track](https://dependencytrack.org/) for the continuous analysis of components.
+The CycloneDX Ruby Gem creates a valid CycloneDX bill-of-material document from all project dependencies. CycloneDX is a lightweight BoM specification that is easily created, human readable, and simple to parse. 
 
 #### Installing from RubyGems
 
