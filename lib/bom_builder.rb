@@ -2,10 +2,10 @@ require "bundler"
 require "fileutils"
 require "json"
 require "logger"
-require "nokogiri"
 require "optparse"
 require "ostruct"
 require "rest_client"
+require "rexml/document"
 require 'securerandom'
 require_relative "bom_helpers"
 
