@@ -46,6 +46,7 @@ end
 def get_gem(name, version)
   url = "https://rubygems.org/api/v1/versions/#{name}.json"
   begin
+    RestClient.proxy = ENV['http_proxy']
     response = RestClient.get(url)
     body = JSON.parse(response.body)
     body.select { |item| item['number'] == version.to_s }.first
