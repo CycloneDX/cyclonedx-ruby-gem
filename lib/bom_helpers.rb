@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 def purl(name, version)
-  purl = "pkg:gem/#{name}@#{version}"
+  "pkg:gem/#{name}@#{version}"
 end
 
 def random_urn_uuid
-  random_urn_uuid = "urn:uuid:#{SecureRandom.uuid}"
+  "urn:uuid:#{SecureRandom.uuid}"
 end
 
 def build_bom(gems)
