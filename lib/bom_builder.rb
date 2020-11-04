@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require "bundler"
-require "fileutils"
-require "json"
-require "logger"
-require "nokogiri"
-require "optparse"
-require "ostruct"
-require "rest_client"
+require 'bundler'
+require 'fileutils'
+require 'json'
+require 'logger'
+require 'nokogiri'
+require 'optparse'
+require 'ostruct'
+require 'rest_client'
 require 'securerandom'
-require_relative "bom_helpers"
+require_relative 'bom_helpers'
 
 class Bombuilder
   def self.build(path)
@@ -36,7 +36,7 @@ class Bombuilder
 
     begin
       @logger.info("Writing BOM to #{@bom_file_path}...")
-      File.open(@bom_file_path, "w") {|file| file.write(bom)}
+      File.open(@bom_file_path, 'w') { |file| file.write(bom) }
 
       if @options[:verbose]
         @logger.info("#{@gems.size} gems were written to BOM located at #{@bom_file_path}")
@@ -52,36 +52,36 @@ class Bombuilder
   def self.setup(path)
     @options = {}
     OptionParser.new do |opts|
-      opts.banner = "Usage: cyclonedx-ruby [options]"
-    
-      opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
+      opts.banner = 'Usage: cyclonedx-ruby [options]'
+
+      opts.on('-v', '--[no-]verbose', 'Run verbosely') do |v|
         @options[:verbose] = v
       end
-      opts.on("-p", "--path path", "(Required) Path to Ruby project directory") do |path|
+      opts.on('-p', '--path path', '(Required) Path to Ruby project directory') do |path|
         @options[:path] = path
       end
-      opts.on("-o", "--output bom_file_path", "(Optional) Path to output the bom.xml file to") do |bom_file_path|
+      opts.on('-o', '--output bom_file_path', '(Optional) Path to output the bom.xml file to') do |bom_file_path|
         @options[:bom_file_path] = bom_file_path
       end
-      opts.on_tail("-h", "--help", "Show help message") do
+      opts.on_tail('-h', '--help', 'Show help message') do
         puts opts
         exit
       end
     end.parse!
 
-    @logger = Logger.new(STDOUT)
-    if @options[:verbose]
-      @logger.level = Logger::INFO
-    else
-      @logger.level = Logger::ERROR
-    end
+    @logger = Logger.new($stdout)
+    @logger.level = if @options[:verbose]
+                      Logger::INFO
+                    else
+                      Logger::ERROR
+                    end
 
     @gems = []
     licenses_file = File.read "#{__dir__}/licenses.json"
     @licenses_list = JSON.parse(licenses_file)
 
     if @options[:path].nil?
-      @logger.error("missing path to project directory")
+      @logger.error('missing path to project directory')
       abort
     end
 
@@ -98,50 +98,50 @@ class Bombuilder
       abort
     end
 
-    if @options[:bom_file_path].nil?
-      @bom_file_path = "./bom.xml"
-    else
-      @bom_file_path = @options[:bom_file_path]
-    end
+    @bom_file_path = if @options[:bom_file_path].nil?
+                       './bom.xml'
+                     else
+                       @options[:bom_file_path]
+                     end
 
     @logger.info("BOM will be written to #{@bom_file_path}")
 
     begin
-      gemfile_path = @options[:path] + "/" + "Gemfile.lock"
+      gemfile_path = "#{@options[:path]}/Gemfile.lock"
       @logger.info("Parsing specs from #{gemfile_path}...")
       gemfile_contents = File.read(gemfile_path)
       @specs = Bundler::LockfileParser.new(gemfile_contents).specs
-      @logger.info("Specs successfully parsed!")
+      @logger.info('Specs successfully parsed!')
     rescue => e
       @logger.error("Unable to parse specs from #{gemfile_path}. #{e.message}: #{e.backtrace.join('\n')}")
       abort
     end
   end
-  
+
   def self.specs_list
     count = 0
     @specs.each do |dependency|
       object = OpenStruct.new
-      object.name = dependency.name 
-      object.version = dependency.version 
+      object.name = dependency.name
+      object.version = dependency.version
       object.purl = purl(object.name, object.version)
       gem = get_gem(object.name, object.version)
       next if gem.nil?
-      
-      if gem["licenses"] and gem["licenses"].length > 0
-        if @licenses_list.include? gem["licenses"].first
-          object.license_id = gem["licenses"].first
+
+      if gem['licenses']&.length&.positive?
+        if @licenses_list.include? gem['licenses'].first
+          object.license_id = gem['licenses'].first
         else
-          object.license_name = gem["licenses"].first
+          object.license_name = gem['licenses'].first
         end
       end
 
-      object.author = gem["authors"]
-      object.description = gem["summary"] 
-      object.hash = gem["sha"]
+      object.author = gem['authors']
+      object.description = gem['summary']
+      object.hash = gem['sha']
       @gems.push(object)
       count += 1
       @logger.info("#{object.name}:#{object.version} gem added")
     end
-  end 
+  end
 end
