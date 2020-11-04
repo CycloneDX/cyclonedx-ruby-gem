@@ -85,7 +85,7 @@ class Bombuilder
       abort
     end
 
-    if !File.directory?(@options[:path])
+    unless File.directory?(@options[:path])
       @logger.error("path provided is not a valid directory. path provided was: #{@options[:path]}")
       abort
     end
