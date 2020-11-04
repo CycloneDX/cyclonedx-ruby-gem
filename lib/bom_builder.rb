@@ -21,7 +21,7 @@ class Bombuilder
     begin
       @logger.info("Changing directory to the original working directory located at #{original_working_directory}")
       Dir.chdir original_working_directory
-    rescue => e
+    rescue StandardError => e
       @logger.error("Unable to change directory the original working directory located at #{original_working_directory}. #{e.message}: #{e.backtrace.join('\n')}")
       abort
     end
@@ -29,7 +29,7 @@ class Bombuilder
     bom_directory = File.dirname(@bom_file_path)
     begin
       FileUtils.mkdir_p(bom_directory) unless File.directory?(bom_directory)
-    rescue => e
+    rescue StandardError => e
       @logger.error("Unable to create the directory to hold the BOM output at #{@bom_directory}. #{e.message}: #{e.backtrace.join('\n')}")
       abort
     end
@@ -43,7 +43,7 @@ class Bombuilder
       else
         puts "#{@gems.size} gems were written to BOM located at #{@bom_file_path}"
       end
-    rescue => e
+    rescue StandardError => e
       @logger.error("Unable to write BOM to #{@bom_file_path}. #{e.message}: #{e.backtrace.join('\n')}")
       abort
     end
@@ -93,7 +93,7 @@ class Bombuilder
     begin
       @logger.info("Changing directory to Ruby project directory located at #{@options[:path]}")
       Dir.chdir @options[:path]
-    rescue => e
+    rescue StandardError => e
       @logger.error("Unable to change directory to Ruby project directory located at #{@options[:path]}. #{e.message}: #{e.backtrace.join('\n')}")
       abort
     end
@@ -112,7 +112,7 @@ class Bombuilder
       gemfile_contents = File.read(gemfile_path)
       @specs = Bundler::LockfileParser.new(gemfile_contents).specs
       @logger.info('Specs successfully parsed!')
-    rescue => e
+    rescue StandardError => e
       @logger.error("Unable to parse specs from #{gemfile_path}. #{e.message}: #{e.backtrace.join('\n')}")
       abort
     end
