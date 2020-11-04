@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def purl(name, version)
     purl = "pkg:gem/" + name + "@" + version.to_s
 end
