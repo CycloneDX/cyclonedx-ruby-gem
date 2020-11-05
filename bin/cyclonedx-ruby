@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'bom_builder'
 Bombuilder.build(ARGV[0])
