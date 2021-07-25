@@ -2,7 +2,7 @@ Gem::Specification.new do |spec|
   spec.name        = "cyclonedx-ruby"
   spec.version     = "1.1.0"
   spec.date        = "2019-07-12"
-  spec.summary     = "CycloneDX software bill-of-material (SBoM) generation utility"
+  spec.summary     = "CycloneDX Software Bill of Material (SBOM) generation utility"
   spec.description = "CycloneDX is a lightweight software bill-of-material (SBOM) specification designed for use in application security contexts and supply chain component analysis. This Gem generates CycloneDX BOMs from Ruby projects."
   spec.authors     = ["Joseph Kobti", "Steve Springett"]
   spec.email       = "josephkobti@outlook.com"
