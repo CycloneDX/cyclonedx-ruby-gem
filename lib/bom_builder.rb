@@ -34,6 +34,8 @@ require_relative 'bom_helpers'
 require 'active_support/core_ext/hash'
 
 class Bombuilder
+  SUPPORTED_BOM_FORMATS = %w[xml json]
+
   def self.build(path)
     original_working_directory = Dir.pwd
     setup(path)
@@ -123,12 +125,12 @@ class Bombuilder
       abort
     end
 
-    if @options[:bom_output_format].nil? || @options[:bom_output_format] == "xml"
+    if @options[:bom_output_format].nil?
       @bom_output_format = 'xml'
-    elsif @options[:bom_output_format] == "json"
-      @bom_output_format = 'json'
+    elsif SUPPORTED_BOM_FORMATS.include?(@options[:bom_output_format])
+      @bom_output_format = @options[:bom_output_format]
     else
-      @logger.error("Unrecognized cyclonedx bom output format provided: #{@options[:bom_output_format]}")
+      @logger.error("Unrecognized cyclonedx bom output format provided. Please choose one of #{SUPPORTED_BOM_FORMATS}")
       abort
     end
 
