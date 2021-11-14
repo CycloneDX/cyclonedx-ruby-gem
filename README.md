@@ -29,9 +29,10 @@ cyclonedx-ruby [options]
 
     `-v, --[no-]verbose` Run verbosely
     `-p, --path path` Path to Ruby project directory
+    `-f, --format` Bom output format
     `-h, --help` Show help message
 
-**Output:** bom.xml file in project directory
+**Output:** bom.xml or bom.json file in project directory
 
 #### Example
 ```bash

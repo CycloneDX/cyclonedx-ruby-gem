@@ -29,7 +29,7 @@ def random_urn_uuid
   "urn:uuid:#{SecureRandom.uuid}"
 end
 
-def build_bom(gems)
+def build_bom(gems, format)
   builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
     attributes = { 'xmlns' => 'http://cyclonedx.org/schema/bom/1.1', 'version' => '1', 'serialNumber' => random_urn_uuid }
     xml.bom(attributes) do
@@ -61,7 +61,16 @@ def build_bom(gems)
       end
     end
   end
-  builder.to_xml
+
+  xml = builder.to_xml
+
+  # Format verified to be either xml (default) or json in setup
+  if format == 'json'
+    JSON.pretty_generate(Hash.from_xml(xml))
+  else
+    xml
+  end
+
 end
 
 def get_gem(name, version)

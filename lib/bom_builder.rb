@@ -31,13 +31,14 @@ require 'ostruct'
 require 'rest_client'
 require 'securerandom'
 require_relative 'bom_helpers'
+require 'active_support/core_ext/hash'
 
 class Bombuilder
   def self.build(path)
     original_working_directory = Dir.pwd
     setup(path)
     specs_list
-    bom = build_bom(@gems)
+    bom = build_bom(@gems, @bom_output_format)
 
     begin
       @logger.info("Changing directory to the original working directory located at #{original_working_directory}")
@@ -84,6 +85,9 @@ class Bombuilder
       opts.on('-o', '--output bom_file_path', '(Optional) Path to output the bom.xml file to') do |bom_file_path|
         @options[:bom_file_path] = bom_file_path
       end
+      opts.on('-f', '--format bom_output_format', '(Optional) Output format for bom. Currently support xml (default) and json.') do |bom_output_format|
+        @options[:bom_output_format] = bom_output_format
+      end
       opts.on_tail('-h', '--help', 'Show help message') do
         puts opts
         exit
@@ -119,8 +123,17 @@ class Bombuilder
       abort
     end
 
+    if @options[:bom_output_format].nil? || @options[:bom_output_format] == "xml"
+      @bom_output_format = 'xml'
+    elsif @options[:bom_output_format] == "json"
+      @bom_output_format = 'json'
+    else
+      @logger.error("Unrecognized cyclonedx bom output format provided: #{@options[:bom_output_format]}")
+      abort
+    end
+
     @bom_file_path = if @options[:bom_file_path].nil?
-                       './bom.xml'
+                       "./bom.#{@bom_output_format}"
                      else
                        @options[:bom_file_path]
                      end
