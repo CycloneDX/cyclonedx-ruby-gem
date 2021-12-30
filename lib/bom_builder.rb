@@ -146,6 +146,24 @@ class Bombuilder
       object.name = dependency.name
       object.version = dependency.version
       object.purl = purl(object.name, object.version)
+
+      if dependency.source.is_a?(Bundler::Source::Path) && !dependency.source.is_a?(Bundler::Source::Git)
+        object.path = "path"
+        object.path_ref = dependency.source.path
+      elsif dependency.source.is_a?(Bundler::Source::Git)
+        git_source = dependency.source.uri
+        git_branch = dependency.source.ref
+        object.uri_ref = "#{git_source}/#{git_branch}"
+        object.github = "github"
+      end
+
+      unless dependency.source.is_a?(Bundler::Source::Rubygems)
+        @gems.push(object)
+        count += 1
+        @logger.info("#{object.name}:#{object.version} gem added")
+        next
+      end
+
       gem = get_gem(object.name, object.version)
       next if gem.nil?
 
@@ -160,6 +178,9 @@ class Bombuilder
       object.author = gem['authors']
       object.description = gem['summary']
       object.hash = gem['sha']
+      object.gem = 'gem'
+      object.remotes_ref = dependency.source.remotes.join(',')
+
       @gems.push(object)
       count += 1
       @logger.info("#{object.name}:#{object.version} gem added")

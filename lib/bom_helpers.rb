@@ -38,9 +38,27 @@ def build_bom(gems)
           xml.component('type' => 'library') do
             xml.name gem['name']
             xml.version gem['version']
-            xml.description gem['description']
+            if gem['description']
+              xml.description gem['description']
+            end
             xml.hashes  do
               xml.hash_ gem['hash'], alg: 'SHA-256'
+            end
+            if gem['gem']
+             xml.properties do
+                xml.property_ gem['gem'], name: 'type'
+                xml.property_ gem['remotes_ref'], name: 'ref'
+              end
+            elsif gem['github']
+              xml.properties do
+                xml.property_ gem['github'], name: 'type'
+                xml.property_ gem['uri_ref'], name: 'ref'
+              end
+            elsif gem['path']
+              xml.properties do
+                xml.property_ gem['path'], name: 'type'
+                xml.property_ gem['path_ref'], name: 'ref'
+              end
             end
             if gem['license_id']
               xml.licenses do
