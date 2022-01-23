@@ -21,6 +21,9 @@
 # Copyright (c) OWASP Foundation. All Rights Reserved.
 #
 # frozen_string_literal: true
+
+require_relative 'bom_component'
+
 def purl(name, version)
   "pkg:gem/#{name}@#{version}"
 end
@@ -30,6 +33,30 @@ def random_urn_uuid
 end
 
 def build_bom(gems, format)
+  if format == 'json'
+    build_json_bom(gems)
+  else
+    build_bom_xml(gems)
+  end
+end
+
+def build_json_bom(gems)
+  bom_hash = {
+    "bomFormat": "CycloneDX",
+    "specVersion": "1.1",
+    "serialNumber": random_urn_uuid,
+    "version": 1,
+    "components": []
+  }
+
+  gems.each do |gem|
+    bom_hash[:components] += BomComponent.new(gem).hash_val()
+  end
+
+  JSON.pretty_generate(bom_hash)
+end
+
+def build_bom_xml(gems)
   builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
     attributes = { 'xmlns' => 'http://cyclonedx.org/schema/bom/1.1', 'version' => '1', 'serialNumber' => random_urn_uuid }
     xml.bom(attributes) do
@@ -62,15 +89,7 @@ def build_bom(gems, format)
     end
   end
 
-  xml = builder.to_xml
-
-  # Format verified to be either xml (default) or json in setup
-  if format == 'json'
-    JSON.pretty_generate(Hash.from_xml(xml))
-  else
-    xml
-  end
-
+  builder.to_xml
 end
 
 def get_gem(name, version)
