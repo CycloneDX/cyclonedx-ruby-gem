@@ -9,6 +9,8 @@ class BomComponent
     @description = gem['description']
     @hash = gem['hash']
     @purl = gem['purl']
+    @authors = gem['authors']
+    @created_at = gem['created_at']
     @gem = gem
   end
 
@@ -18,6 +20,8 @@ class BomComponent
       "name": @name,
       "version": @version,
       "description": @description,
+      "authors": @authors,
+      "created_at": @created_at,
       "purl": @purl,
       "hashes": [
           "alg": HASH_ALG,
