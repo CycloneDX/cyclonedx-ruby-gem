@@ -104,3 +104,19 @@ def get_gem(name, version)
     nil
   end
 end
+
+def potential_license_files
+  %w[
+    COPYING
+    LICENSE
+    license.md
+    Licence.md
+    LICENSE.md
+    LICENSE.txt
+    License.rdoc
+    LICENSE.rdoc
+    MIT-LICENSE
+    MIT-LICENSE.txt
+  ]
+end
+

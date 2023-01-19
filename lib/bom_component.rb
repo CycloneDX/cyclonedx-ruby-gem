@@ -25,21 +25,24 @@ class BomComponent
       ]
     }
 
-    if @gem['license_id']
-      component_hash[:"licenses"] = [
-        "license": {
-          "id": @gem['license_id']
-        }
-      ]
-    elsif @gem['license_name']
-      component_hash[:"licenses"] = [
-        "license": {
-          "name": @gem['license_name']
-        }
-      ]
+    if @gem['license_text'] || @gem['license_name']
+      license_section = {
+        license: {}
+      }
+
+      if @gem['license_id']
+        license_section[:license][:id] = @gem['license_id']
+      elsif @gem['license_name']
+        license_section[:license][:name] = @gem['license_name']
+      end
+
+      if @gem['license_text']
+        license_section[:license][:text] = { content: @gem['license_text'] }
+      end
+
+      component_hash[:licenses] = [license_section]
     end
 
     [component_hash]
-
   end
 end
