@@ -22,6 +22,7 @@
 #
 # frozen_string_literal: true
 require 'bundler'
+require 'bundler/cli'
 require 'fileutils'
 require 'json'
 require 'logger'
@@ -89,6 +90,9 @@ class Bombuilder
       end
       opts.on('-f', '--format bom_output_format', '(Optional) Output format for bom. Currently support xml (default) and json.') do |bom_output_format|
         @options[:bom_output_format] = bom_output_format
+      end
+      opts.on('-l', '--include-license-text', '(Optional) Include full license text') do |l|
+        @options[:include_licenses] = l
       end
       opts.on_tail('-h', '--help', 'Show help message') do
         puts opts
@@ -169,6 +173,19 @@ class Bombuilder
           object.license_id = gem['licenses'].first
         else
           object.license_name = gem['licenses'].first
+        end
+
+        if @options[:include_licenses]
+          if spec = Bundler::CLI::Common.select_spec(dependency.name, :regex_match)
+            gem_path = spec.full_gem_path
+            potential_license_files.each do |potential_license_file|
+              potential_license_full_path = "#{gem_path}/#{potential_license_file}"
+              if File.exist?(potential_license_full_path)
+                object.license_text = File.read(potential_license_full_path)
+                break
+              end
+            end
+          end
         end
       end
 
