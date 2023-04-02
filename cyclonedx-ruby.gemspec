@@ -8,10 +8,18 @@ Gem::Specification.new do |spec|
   spec.description = 'CycloneDX is a lightweight software bill-of-material (SBOM) specification designed for use in application security contexts and supply chain component analysis. This Gem generates CycloneDX BOMs from Ruby projects.'
   spec.authors     = ['Joseph Kobti', 'Steve Springett']
   spec.email       = 'josephkobti@outlook.com'
-  spec.files       = ['lib/bom_builder.rb', 'lib/bom_helpers.rb', 'lib/licenses.json', 'lib/bom_component.rb']
   spec.homepage    = 'https://github.com/CycloneDX/cyclonedx-ruby-gem'
   spec.license     = 'Apache-2.0'
-  spec.executables << 'cyclonedx-ruby'
+
+  spec.files = Dir.chdir(__dir__) do
+    `git ls-files -z`.split("\x0").reject do |f|
+      (File.expand_path(f) == __FILE__) || f.start_with?(*%w[bin/ test/ spec/ features/ .git .circleci appveyor])
+    end
+  end
+  spec.bindir = 'exe'
+  spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
+  spec.require_paths = ['lib']
+
   spec.add_dependency('json', '~> 2.2')
   spec.add_dependency('nokogiri', '~> 1.8')
   spec.add_dependency('ostruct', '~> 0.1')
