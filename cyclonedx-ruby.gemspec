@@ -26,4 +26,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency('rest-client', '~> 2.0')
   spec.add_development_dependency 'rake', '~> 12'
   spec.add_development_dependency 'rspec', '~> 3.7'
+  spec.add_development_dependency 'cucumber', '~> 8.0'
+  spec.add_development_dependency 'aruba', '~> 2.1'
 end
