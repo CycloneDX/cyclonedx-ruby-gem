@@ -1,0 +1,108 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.1",
+  "serialNumber": "urn:uuid:d498cdc2-5494-4031-b37d-ff3d10d336bf",
+  "version": 1,
+  "components": [
+    {
+      "type": "library",
+      "name": "activesupport",
+      "version": "7.0.4.3",
+      "description": "A toolkit of support libraries and Ruby core extensions extracted from the Rails framework.",
+      "purl": "pkg:gem/activesupport@7.0.4.3",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "571ed0fac8510f1fc8a1d66aa070d07ea269913bf9ef50960a8044536358a096"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "concurrent-ruby",
+      "version": "1.2.2",
+      "description": "Modern concurrency tools for Ruby. Inspired by Erlang, Clojure, Scala, Haskell, F#, C#, Java, and classic concurrency patterns.",
+      "purl": "pkg:gem/concurrent-ruby@1.2.2",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3879119b8b75e3b62616acc256c64a134d0b0a7a9a3fcba5a233025bcde22c4f"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "i18n",
+      "version": "1.12.0",
+      "description": "New wave Internationalization support for Ruby",
+      "purl": "pkg:gem/i18n@1.12.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "91e3cc1b97616d308707eedee413d82ee021d751c918661fb82152793e64aced"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "minitest",
+      "version": "5.18.0",
+      "description": "minitest provides a complete suite of testing facilities supporting TDD, BDD, mocking, and benchmarking",
+      "purl": "pkg:gem/minitest@5.18.0",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "06f43aa0692ce3acf19cb5bc539ad2c6095ca3d2c7e5fbafc58a7d847e898745"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "tzinfo",
+      "version": "2.0.6",
+      "description": "Time Zone Library",
+      "purl": "pkg:gem/tzinfo@2.0.6",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8daf828cc77bcf7d63b0e3bdb6caa47e2272dcfaf4fbfe46f8c3a9df087a829b"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    }
+  ]
+}
