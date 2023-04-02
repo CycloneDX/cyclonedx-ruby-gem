@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bom xmlns="http://cyclonedx.org/schema/bom/1.1" version="1" serialNumber="urn:uuid:ffc51349-2d7d-408e-b2c1-3e3f220e6d2f">
+  <components>
+    <component type="library">
+      <name>activesupport</name>
+      <version>7.0.4.3</version>
+      <description>A toolkit of support libraries and Ruby core extensions extracted from the Rails framework.</description>
+      <hashes>
+        <hash alg="SHA-256">571ed0fac8510f1fc8a1d66aa070d07ea269913bf9ef50960a8044536358a096</hash>
+      </hashes>
+      <licenses>
+        <license>
+          <id>MIT</id>
+        </license>
+      </licenses>
+      <purl>pkg:gem/activesupport@7.0.4.3</purl>
+    </component>
+    <component type="library">
+      <name>concurrent-ruby</name>
+      <version>1.2.2</version>
+      <description>Modern concurrency tools for Ruby. Inspired by Erlang, Clojure, Scala, Haskell, F#, C#, Java, and classic concurrency patterns.</description>
+      <hashes>
+        <hash alg="SHA-256">3879119b8b75e3b62616acc256c64a134d0b0a7a9a3fcba5a233025bcde22c4f</hash>
+      </hashes>
+      <licenses>
+        <license>
+          <id>MIT</id>
+        </license>
+      </licenses>
+      <purl>pkg:gem/concurrent-ruby@1.2.2</purl>
+    </component>
+    <component type="library">
+      <name>i18n</name>
+      <version>1.12.0</version>
+      <description>New wave Internationalization support for Ruby</description>
+      <hashes>
+        <hash alg="SHA-256">91e3cc1b97616d308707eedee413d82ee021d751c918661fb82152793e64aced</hash>
+      </hashes>
+      <licenses>
+        <license>
+          <id>MIT</id>
+        </license>
+      </licenses>
+      <purl>pkg:gem/i18n@1.12.0</purl>
+    </component>
+    <component type="library">
+      <name>minitest</name>
+      <version>5.18.0</version>
+      <description>minitest provides a complete suite of testing facilities supporting TDD, BDD, mocking, and benchmarking</description>
+      <hashes>
+        <hash alg="SHA-256">06f43aa0692ce3acf19cb5bc539ad2c6095ca3d2c7e5fbafc58a7d847e898745</hash>
+      </hashes>
+      <licenses>
+        <license>
+          <id>MIT</id>
+        </license>
+      </licenses>
+      <purl>pkg:gem/minitest@5.18.0</purl>
+    </component>
+    <component type="library">
+      <name>tzinfo</name>
+      <version>2.0.6</version>
+      <description>Time Zone Library</description>
+      <hashes>
+        <hash alg="SHA-256">8daf828cc77bcf7d63b0e3bdb6caa47e2272dcfaf4fbfe46f8c3a9df087a829b</hash>
+      </hashes>
+      <licenses>
+        <license>
+          <id>MIT</id>
+        </license>
+      </licenses>
+      <purl>pkg:gem/tzinfo@2.0.6</purl>
+    </component>
+  </components>
+</bom>
