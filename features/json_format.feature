@@ -8,7 +8,7 @@ Feature: Creating BOM using Json format
     5 gems were written to BOM located at ./bom.json
     """
     And a file named "bom.json" should exist
-    And the generated XML Json file "bom.json" matches "bom.json.expected"
+    And the generated Json BOM file "bom.json" matches "bom.json.expected"
 
   Scenario: Specifying the output path
     Given I use a fixture named "simple"
@@ -18,7 +18,7 @@ Feature: Creating BOM using Json format
     5 gems were written to BOM located at bom/simple.bom.json
     """
     And a file named "bom/simple.bom.json" should exist
-    And the generated XML Json file "bom/simple.bom.json" matches "bom.json.expected"
+    And the generated Json BOM file "bom/simple.bom.json" matches "bom.json.expected"
 
   Scenario: Verbose output
     Given I use a fixture named "simple"
@@ -39,5 +39,5 @@ Feature: Creating BOM using Json format
     I, \[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6} #\d+\]  INFO -- : 5 gems were written to BOM located at \./bom\.json
     """
     And a file named "bom.json" should exist
-    And the generated XML Json file "bom.json" matches "bom.json.expected"
+    And the generated Json BOM file "bom.json" matches "bom.json.expected"
 
