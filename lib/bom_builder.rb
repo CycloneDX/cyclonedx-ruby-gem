@@ -21,6 +21,7 @@
 # Copyright (c) OWASP Foundation. All Rights Reserved.
 #
 # frozen_string_literal: true
+
 require 'bundler'
 require 'fileutils'
 require 'json'
@@ -172,7 +173,8 @@ class Bombuilder
         end
       end
 
-      object.author = gem['authors']
+      object.authors = gem['authors']
+      object.created_at = gem['created_at']
       object.description = gem['summary']
       object.hash = gem['sha']
       @gems.push(object)
