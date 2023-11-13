@@ -162,7 +162,11 @@ class Bombuilder
       object.version = dependency.version
       object.purl = purl(object.name, object.version)
       gem = get_gem(object.name, object.version)
-      next if gem.nil?
+      # If gem is unpublished, or if this version is unavailable, then add basic gem information instead of skipping it
+      if gem.nil?
+        @gems.push(object)
+        next
+      end
 
       if gem['licenses']&.length&.positive?
         if @licenses_list.include? gem['licenses'].first

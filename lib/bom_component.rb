@@ -17,13 +17,21 @@ class BomComponent
       "type": DEFAULT_TYPE,
       "name": @name,
       "version": @version,
-      "description": @description,
-      "purl": @purl,
-      "hashes": [
-          "alg": HASH_ALG,
-          "content": @hash
-      ]
+      "purl": @purl
     }
+
+    # Add description only if it is available
+    if @description
+      component_hash[:"description"] = @description
+    end
+
+    # Add hash only if it is available
+    if @hash
+      component_hash[:"hashes"] = [
+        "alg": HASH_ALG,
+        "content": @hash
+      ]
+    end
 
     if @gem['license_id']
       component_hash[:"licenses"] = [
