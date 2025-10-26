@@ -45,6 +45,7 @@ Appraisal.*.gemfile.lock
 
 # Editors
 *~
+/.idea/
 
 # vendor
 /vendor/
