@@ -25,9 +25,11 @@ Gem::Specification.new do |spec|
 
   # Specify which files are part of the released package.
   spec.files = Dir[
+    #
     # Executables and tasks
     "exe/*",
     "lib/**/*.rb",
+    "lib/licenses.json",
     # Signatures
     "sig/**/*.rbs",
   ]

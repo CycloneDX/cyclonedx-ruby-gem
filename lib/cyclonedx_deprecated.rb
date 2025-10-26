@@ -15,3 +15,6 @@ deprecated_alias :instance, :build_bom, :build_bom, Cyclonedx::BomHelpers
 deprecated_alias :instance, :build_json_bom, :build_json_bom, Cyclonedx::BomHelpers
 deprecated_alias :instance, :build_bom_xml, :build_bom_xml, Cyclonedx::BomHelpers
 deprecated_alias :instance, :get_gem, :get_gem, Cyclonedx::BomHelpers
+
+# Sanity
+raise "Deprecated methods broken" unless purl('activesupport', '7.0.1') == "pkg:gem/activesupport@7.0.1"

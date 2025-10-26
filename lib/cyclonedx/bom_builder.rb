@@ -1,7 +1,8 @@
-
 module Cyclonedx
   class BomBuilder
     SUPPORTED_BOM_FORMATS = %w[xml json]
+
+    extend Cyclonedx::BomHelpers
 
     def self.build(path)
       original_working_directory = Dir.pwd
@@ -71,7 +72,9 @@ module Cyclonedx
                       end
 
       @gems = []
-      licenses_file = File.read "#{__dir__}/licenses.json"
+      # Adjusted to point to lib/licenses.json relative to this file's directory (lib/cyclonedx)
+      licenses_path = File.expand_path('../licenses.json', __dir__)
+      licenses_file = File.read(licenses_path)
       @licenses_list = JSON.parse(licenses_file)
 
       if @options[:path].nil?

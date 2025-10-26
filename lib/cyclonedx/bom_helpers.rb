@@ -26,7 +26,7 @@ require_relative 'bom_component'
 
 module Cyclonedx
   module BomHelpers
-    extend self
+    module_function
 
     def purl(name, version)
       "pkg:gem/#{name}@#{version}"
@@ -86,7 +86,11 @@ module Cyclonedx
                     end
                   end
                 end
-                xml.purl gem['purl']
+                # The globally scoped legacy `Object#purl` method breaks the Nokogiri builder context
+                # Fortunately Nokogiri has a built-in workaround, adding an underscore to the method name.
+                # The resulting XML tag is still `<purl>`.
+                # Globally scoped legacy `Object#purl` will be removed in v2.0.0, and this hack can be removed then.
+                xml.purl_ gem['purl']
               end
             end
           end

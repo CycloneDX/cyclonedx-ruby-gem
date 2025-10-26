@@ -50,6 +50,12 @@ Please file a bug if you notice a violation of semantic versioning.
 
 ### Fixed
 
+- `Nokogiri::XML::Builder` context relies on `method_missing`
+  - Globally defined `Object#purl` conflicted with `<purl>`.
+  - Moved to `Cyclonedx::BomHelpers.purl` to avoid conflict in v2.0.0 (along with all other global methods)
+  - Fixed existing usage via the built-in Nokogiri workaround of adding an underscore `purl_`
+  - The XML tag is unchanged as `<purl>`
+
 ### Security
 
 ## [1.1.0] - 2019-07-13
