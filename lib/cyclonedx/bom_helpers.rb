@@ -105,6 +105,62 @@ module Cyclonedx
       builder.to_xml
     end
 
+    # Validate content against the selected CycloneDX schema (local files, offline)
+    # Returns [true, nil] on success; [false, "message"] on failure
+    def validate_bom_content(content, format, spec_version)
+      schema_dir = File.expand_path("../../schema", __dir__)
+      case format
+      when 'json'
+        schema_path = File.join(schema_dir, "bom-#{spec_version}.schema.json")
+        begin
+          schema = JSON.parse(File.read(schema_path))
+          resolver = lambda do |uri|
+            begin
+              u = uri.is_a?(URI) ? uri : URI.parse(uri.to_s)
+              basename = File.basename(u.path.to_s)
+              local_path = File.join(schema_dir, basename)
+              return JSON.parse(File.read(local_path)) if File.exist?(local_path)
+            rescue StandardError
+              # fall through to unknown ref handling in schemer
+            end
+            nil
+          end
+          schemer = JSONSchemer.schema(schema, ref_resolver: resolver)
+          data = JSON.parse(content)
+          errors = schemer.validate(data).to_a
+          return [true, nil] if errors.empty?
+          # Build a compact error message
+          msgs = errors.first(5).map do |e|
+            path = Array(e['data_pointer']).join
+            "#{e['type']}: #{e['message']} at #{path}"
+          end
+          [false, "JSON schema validation failed (#{errors.size} errors). First: #{msgs.join('; ')}"]
+        rescue Errno::ENOENT
+          [false, "JSON schema not found at #{schema_path}"]
+        rescue StandardError => e
+          [false, "JSON schema validation error: #{e.class}: #{e.message}"]
+        end
+      else
+        schema_path = File.join(schema_dir, "bom-#{spec_version}.xsd")
+        begin
+          # Use local XML catalog to resolve imports like http://cyclonedx.org/schema/spdx
+          previous_catalog = ENV['XML_CATALOG_FILES']
+          ENV['XML_CATALOG_FILES'] = File.join(schema_dir, 'xmlcatalog.xml')
+          xsd = Nokogiri::XML::Schema(File.read(schema_path))
+          doc = Nokogiri::XML(content) { |cfg| cfg.nonet }
+          errors = xsd.validate(doc)
+          return [true, nil] if errors.empty?
+          [false, "XML schema validation failed: #{errors.first.message}"]
+        rescue Errno::ENOENT
+          [false, "XML schema not found at #{schema_path}"]
+        rescue StandardError => e
+          [false, "XML schema validation error: #{e.class}: #{e.message}"]
+        ensure
+          ENV['XML_CATALOG_FILES'] = previous_catalog
+        end
+      end
+    end
+
     def get_gem(name, version)
       url = "https://rubygems.org/api/v1/versions/#{name}.json"
       begin

@@ -3,8 +3,12 @@
 
 if ENV.fetch('MIMIC_NEXT_MAJOR_VERSION', 'false').casecmp?('true')
   require 'cyclonedx/ruby'
-  Cyclonedx::BomBuilder.build(ARGV[0])
+  path_arg = ARGV[0]
+  path_arg = nil if path_arg&.start_with?('-')
+  Cyclonedx::BomBuilder.build(path_arg)
 else
   require 'bom_builder'
-  Bombuilder.build(ARGV[0])
+  path_arg = ARGV[0]
+  path_arg = nil if path_arg&.start_with?('-')
+  Bombuilder.build(path_arg)
 end

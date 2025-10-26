@@ -10,6 +10,26 @@ module Cyclonedx
     def self.build(path)
       original_working_directory = Dir.pwd
       setup(path)
+
+      # If asked to validate an existing file, do not generate a new one
+      if @options[:validate] && @options[:validate_file]
+        content = begin
+          File.read(@options[:validate_file])
+        rescue StandardError => e
+          @logger.error("Unable to read file for validation: #{@options[:validate_file]}. #{e.message}")
+          exit(1)
+        end
+        # Use explicitly provided format if set, otherwise infer from file extension
+        format = @options[:bom_output_format] || infer_format_from_path(@options[:validate_file])
+        success, message = validate_bom_content(content, format, @spec_version)
+        unless success
+          @logger.error(message)
+          exit(1)
+        end
+        puts "Validation succeeded for #{@options[:validate_file]} (spec #{@spec_version})" unless @options[:verbose]
+        return
+      end
+
       specs_list
       bom = build_bom(@gems, @bom_output_format, @spec_version)
 
@@ -42,7 +62,23 @@ module Cyclonedx
         @logger.error("Unable to write BOM to #{@bom_file_path}. #{e.message}: #{Array(e.backtrace).join("\n")}")
         abort
       end
+
+      if @options[:validate]
+        success, message = validate_bom_content(bom, @bom_output_format, @spec_version)
+        unless success
+          @logger.error(message)
+          exit(1)
+        end
+        @logger.info("BOM validation succeeded for spec #{@spec_version}") if @options[:verbose]
+      end
     end
+
+    # Infer format from file extension when not explicitly provided
+    def self.infer_format_from_path(path)
+      File.extname(path).downcase == '.json' ? 'json' : 'xml'
+    end
+
+    private
 
     def self.setup(path)
       @options = {}
@@ -63,6 +99,12 @@ module Cyclonedx
         end
         opts.on('-s', '--spec-version version', '(Optional) CycloneDX spec version to target (default: 1.7). Supported: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7') do |spec_version|
           @options[:spec_version] = spec_version
+        end
+        opts.on('--validate', 'Validate the produced BOM against the selected CycloneDX schema') do
+          @options[:validate] = true
+        end
+        opts.on('--validate-file PATH', 'Validate an existing BOM file instead of generating one') do |path|
+          @options[:validate_file] = path
         end
         opts.on_tail('-h', '--help', 'Show help message') do
           puts opts
@@ -86,26 +128,31 @@ module Cyclonedx
       licenses_file = File.read(licenses_path)
       @licenses_list = JSON.parse(licenses_file)
 
-      if @options[:path].nil?
-        @logger.error('missing path to project directory')
-        abort
-      end
+      # If only validating a file, project path is optional; otherwise require
+      if @options[:validate_file].nil? || !@options[:validate]
+        if @options[:path].nil?
+          @logger.error('missing path to project directory')
+          abort
+        end
 
-      unless File.directory?(@options[:path])
-        @logger.error("path provided is not a valid directory. path provided was: #{@options[:path]}")
-        abort
+        unless File.directory?(@options[:path])
+          @logger.error("path provided is not a valid directory. path provided was: #{@options[:path]}")
+          abort
+        end
       end
 
       # Normalize to an absolute project path to avoid relative path issues later
-      @project_path = File.expand_path(@options[:path])
+      @project_path = File.expand_path(@options[:path]) if @options[:path]
       @provided_path = @options[:path]
 
-      begin
-        @logger.info("Changing directory to Ruby project directory located at #{@provided_path}")
-        Dir.chdir @project_path
-      rescue StandardError => e
-        @logger.error("Unable to change directory to Ruby project directory located at #{@provided_path}. #{e.message}: #{Array(e.backtrace).join("\n")}")
-        abort
+      if @project_path
+        begin
+          @logger.info("Changing directory to Ruby project directory located at #{@provided_path}")
+          Dir.chdir @project_path
+        rescue StandardError => e
+          @logger.error("Unable to change directory to Ruby project directory located at #{@provided_path}. #{e.message}: #{Array(e.backtrace).join("\n")}")
+          abort
+        end
       end
 
       if @options[:bom_output_format].nil?
@@ -132,20 +179,22 @@ module Cyclonedx
                          @options[:bom_file_path]
                        end
 
-      @logger.info("BOM will be written to #{@bom_file_path}")
+      @logger.info("BOM will be written to #{@bom_file_path}") if @project_path
 
-      begin
-        # Use absolute path so it's correct regardless of current working directory
-        gemfile_path = File.join(@project_path, 'Gemfile.lock')
-        # Compute display path for logs: './Gemfile.lock' when provided path is '.', else '<provided>/Gemfile.lock'
-        display_gemfile_path = (@provided_path == '.' ? './Gemfile.lock' : File.join(@provided_path, 'Gemfile.lock'))
-        @logger.info("Parsing specs from #{display_gemfile_path}...")
-        gemfile_contents = File.read(gemfile_path)
-        @specs = Bundler::LockfileParser.new(gemfile_contents).specs
-        @logger.info('Specs successfully parsed!')
-      rescue StandardError => e
-        @logger.error("Unable to parse specs from #{gemfile_path}. #{e.message}: #{Array(e.backtrace).join("\n")}")
-        abort
+      if @project_path
+        begin
+          # Use absolute path so it's correct regardless of current working directory
+          gemfile_path = File.join(@project_path, 'Gemfile.lock')
+          # Compute display path for logs: './Gemfile.lock' when provided path is '.', else '<provided>/Gemfile.lock'
+          display_gemfile_path = (@provided_path == '.' ? './Gemfile.lock' : File.join(@provided_path, 'Gemfile.lock'))
+          @logger.info("Parsing specs from #{display_gemfile_path}...")
+          gemfile_contents = File.read(gemfile_path)
+          @specs = Bundler::LockfileParser.new(gemfile_contents).specs
+          @logger.info('Specs successfully parsed!')
+        rescue StandardError => e
+          @logger.error("Unable to parse specs from #{gemfile_path}. #{e.message}: #{Array(e.backtrace).join("\n")}")
+          abort
+        end
       end
     end
 

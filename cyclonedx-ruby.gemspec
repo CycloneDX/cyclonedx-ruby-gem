@@ -61,6 +61,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency('ostruct', '~> 0.5.5')
   spec.add_dependency('rest-client', '~> 2.0')
   spec.add_dependency('activesupport', '~> 7.0')
+  spec.add_dependency('json_schemer', '~> 2.2')
   spec.add_development_dependency 'rake', '~> 13'
   spec.add_development_dependency 'rspec', '~> 3.12'
   spec.add_development_dependency 'cucumber', '~> 10.1', '>= 10.1.1'
