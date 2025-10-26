@@ -57,15 +57,26 @@ module Cyclonedx
       }
     end
 
-    def build_bom(gems, format, spec_version, include_metadata: false)
-      if format == 'json'
-        build_json_bom(gems, spec_version, include_metadata: include_metadata)
+    # Safe accessor for Hash or OpenStruct-like objects
+    def _get(obj, key)
+      if obj.respond_to?(:[]) && obj[key]
+        obj[key]
+      elsif obj.respond_to?(key)
+        obj.public_send(key)
       else
-        build_bom_xml(gems, spec_version, include_metadata: include_metadata)
+        nil
       end
     end
 
-    def build_json_bom(gems, spec_version, include_metadata: false)
+    def build_bom(gems, format, spec_version, include_metadata: false, include_enrichment: false)
+      if format == 'json'
+        build_json_bom(gems, spec_version, include_metadata: include_metadata, include_enrichment: include_enrichment)
+      else
+        build_bom_xml(gems, spec_version, include_metadata: include_metadata, include_enrichment: include_enrichment)
+      end
+    end
+
+    def build_json_bom(gems, spec_version, include_metadata: false, include_enrichment: false)
       bom_hash = {
         bomFormat: 'CycloneDX',
         specVersion: spec_version,
@@ -84,13 +95,13 @@ module Cyclonedx
       end
 
       gems.each do |gem|
-        bom_hash[:components] += BomComponent.new(gem).hash_val
+        bom_hash[:components] += BomComponent.new(gem).hash_val(include_enrichment: include_enrichment)
       end
 
       JSON.pretty_generate(bom_hash)
     end
 
-    def build_bom_xml(gems, spec_version, include_metadata: false)
+    def build_bom_xml(gems, spec_version, include_metadata: false, include_enrichment: false)
       builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
         attributes = { 'xmlns' => cyclonedx_xml_namespace(spec_version), 'version' => '1', 'serialNumber' => random_urn_uuid }
         xml.bom(attributes) do
@@ -109,23 +120,29 @@ module Cyclonedx
 
           xml.components do
             gems.each do |gem|
-              xml.component('type' => 'library') do
-                xml.name gem['name']
-                xml.version gem['version']
-                xml.description gem['description']
+              comp_attrs = { 'type' => 'library' }
+              if include_enrichment
+                # Add bom-ref attribute using purl if available
+                ref = _get(gem, 'purl')
+                comp_attrs['bom-ref'] = ref if ref && !ref.to_s.empty?
+              end
+              xml.component(comp_attrs) do
+                xml.name _get(gem, 'name')
+                xml.version _get(gem, 'version')
+                xml.description _get(gem, 'description')
                 xml.hashes  do
-                  xml.hash_ gem['hash'], alg: 'SHA-256'
+                  xml.hash_ _get(gem, 'hash'), alg: 'SHA-256'
                 end
-                if gem['license_id']
+                if _get(gem, 'license_id')
                   xml.licenses do
                     xml.license do
-                      xml.id gem['license_id']
+                      xml.id _get(gem, 'license_id')
                     end
                   end
-                elsif gem['license_name']
+                elsif _get(gem, 'license_name')
                   xml.licenses do
                     xml.license do
-                      xml.name gem['license_name']
+                      xml.name _get(gem, 'license_name')
                     end
                   end
                 end
@@ -133,7 +150,16 @@ module Cyclonedx
                 # Fortunately Nokogiri has a built-in workaround, adding an underscore to the method name.
                 # The resulting XML tag is still `<purl>`.
                 # Globally scoped legacy `Object#purl` will be removed in v2.0.0, and this hack can be removed then.
-                xml.purl_ gem['purl']
+                xml.purl_ _get(gem, 'purl')
+
+                if include_enrichment
+                  # Add optional publisher element if author info exists
+                  author = _get(gem, 'author')
+                  if author && !author.to_s.strip.empty?
+                    first_author = author.to_s.split(/[,&]/).first.to_s.strip
+                    xml.publisher first_author unless first_author.empty?
+                  end
+                end
               end
             end
           end

@@ -11,13 +11,18 @@ Feature: Include metadata.tools in BOM
     And the file "bom.json" should contain:
     """
     "metadata": {
-      "tools": [
-        {
-          "vendor": "CycloneDX",
-          "name": "cyclonedx-ruby"
-        }
-      ]
-    }
+    """
+    And the file "bom.json" should contain:
+    """
+    "tools": [
+    """
+    And the file "bom.json" should contain:
+    """
+    "vendor": "CycloneDX"
+    """
+    And the file "bom.json" should contain:
+    """
+    "name": "cyclonedx-ruby"
     """
 
   Scenario: JSON metadata BOM validates against schema
@@ -40,10 +45,22 @@ Feature: Include metadata.tools in BOM
     And the file "bom.xml" should contain:
     """
     <metadata>
-      <tools>
-        <tool>
-          <vendor>CycloneDX</vendor>
-          <name>cyclonedx-ruby</name>
+    """
+    And the file "bom.xml" should contain:
+    """
+    <tools>
+    """
+    And the file "bom.xml" should contain:
+    """
+    <tool>
+    """
+    And the file "bom.xml" should contain:
+    """
+    <vendor>CycloneDX</vendor>
+    """
+    And the file "bom.xml" should contain:
+    """
+    <name>cyclonedx-ruby</name>
     """
 
   Scenario: XML metadata BOM validates against schema
