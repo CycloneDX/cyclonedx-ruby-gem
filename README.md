@@ -32,6 +32,8 @@ cyclonedx-ruby [options]
     `-o, --output bom_file_path` Path to output the bom file
     `-f, --format bom_output_format` Output format for bom. Supported: xml (default), json
     `-s, --spec-version version` CycloneDX spec version to target (default: 1.7). Supported: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7
+    `--validate` Validate the produced BOM against the selected CycloneDX schema
+    `--validate-file PATH` Validate an existing BOM file instead of generating one
     `-h, --help` Show help message
 
 **Output:** bom.xml or bom.json file in project directory
