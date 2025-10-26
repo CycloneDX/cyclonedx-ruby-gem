@@ -26,6 +26,8 @@ Gem::Specification.new do |spec|
     # Code / tasks / data (NOTE: exe/ is specified via spec.bindir and spec.executables below)
     "lib/**/*.rb",
     "lib/licenses.json",
+    # Schemas used at runtime
+    "schema/**/*",
     # Signatures
     "sig/**/*.rbs"
   ]
