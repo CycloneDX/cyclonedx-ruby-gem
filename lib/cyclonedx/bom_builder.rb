@@ -31,7 +31,7 @@ module Cyclonedx
       end
 
       specs_list
-      bom = build_bom(@gems, @bom_output_format, @spec_version)
+      bom = build_bom(@gems, @bom_output_format, @spec_version, include_metadata: @options[:include_metadata])
 
       begin
         @logger.info("Changing directory to the original working directory located at #{original_working_directory}")
@@ -105,6 +105,9 @@ module Cyclonedx
         end
         opts.on('--validate-file PATH', 'Validate an existing BOM file instead of generating one') do |path|
           @options[:validate_file] = path
+        end
+        opts.on('--include-metadata', 'Include metadata.tools identifying cyclonedx-ruby as the producer') do
+          @options[:include_metadata] = true
         end
         opts.on_tail('-h', '--help', 'Show help message') do
           puts opts

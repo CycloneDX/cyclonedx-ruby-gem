@@ -32,6 +32,7 @@ cyclonedx-ruby [options]
     `-o, --output bom_file_path` Path to output the bom file
     `-f, --format bom_output_format` Output format for bom. Supported: xml (default), json
     `-s, --spec-version version` CycloneDX spec version to target (default: 1.7). Supported: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7
+    `--include-metadata` Include metadata.tools identifying cyclonedx-ruby as the producer
     `--validate` Validate the produced BOM against the selected CycloneDX schema
     `--validate-file PATH` Validate an existing BOM file instead of generating one
     `-h, --help` Show help message
@@ -40,6 +41,7 @@ cyclonedx-ruby [options]
 
 - By default, outputs conform to CycloneDX spec version 1.7.
 - To generate an older spec version, use `--spec-version`.
+- To embed metadata about this tool (vendor/name/version) into the BOM, pass `--include-metadata` (supported for spec >= 1.2).
 
 #### Examples
 ```bash
@@ -54,6 +56,9 @@ cyclonedx-ruby -p /path/to/ruby/project -s 1.3
 
 # JSON at CycloneDX 1.2 to a custom path
 cyclonedx-ruby -p /path/to/ruby/project -f json -s 1.2 -o bom/out.json
+
+# Include producer metadata and validate
+cyclonedx-ruby -p /path/to/ruby/project --include-metadata --validate
 ```
 
 

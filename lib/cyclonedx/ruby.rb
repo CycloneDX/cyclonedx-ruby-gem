@@ -15,9 +15,9 @@ require 'json_schemer'
 
 # This gem
 require_relative 'ruby/version'
-require_relative 'bom_helpers'
+require_relative 'bom_component' # no dependencies
+require_relative 'bom_helpers' # depends on bom_component
 require_relative 'bom_builder' # depends on bom_helpers
-require_relative 'bom_component'
 
 module Cyclonedx
   module Ruby
