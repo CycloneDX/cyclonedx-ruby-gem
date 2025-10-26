@@ -1,6 +1,3 @@
-require 'spec_helper'
-require 'bom_component'
-
 RSpec.shared_examples "a valid hash_val result for gem" do
   it { expect(result.count).to eq(1) }
   it { expect(result[0][:type]).to eq('library') }
@@ -13,7 +10,7 @@ RSpec.shared_examples "a valid hash_val result for gem" do
   it { expect(result[0][:hashes][0][:content]).to eq(gem.hash) }
 end
 
-RSpec.describe BomComponent do
+RSpec.describe Cyclonedx::BomComponent do
   context '#hash_val' do
     let(:base_gem) do
       OpenStruct.new(
@@ -25,11 +22,11 @@ RSpec.describe BomComponent do
       )
     end
 
-    let(:gem) do 
+    let(:gem) do
       base_gem
     end
 
-    subject(:result) { BomComponent.new(gem).hash_val }
+    subject(:result) { Cyclonedx::BomComponent.new(gem).hash_val }
 
     context 'with a gem without a license' do
       include_examples 'a valid hash_val result for gem'

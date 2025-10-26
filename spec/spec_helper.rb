@@ -1,7 +1,16 @@
-# Copied from https://github.com/cucumber/aruba/blob/3b1a6cea6e3ba55370c3396eef0a955aeb40f287/spec/spec_helper.rb
-# Licensed under MIT - https://github.com/cucumber/aruba/blob/3b1a6cea6e3ba55370c3396eef0a955aeb40f287/LICENSE
+# frozen_string_literal: true
 
-$LOAD_PATH << File.expand_path('../lib', __dir__)
+RSpec.configure do |config|
+  # Enable flags like --only-failures and --next-failure
+  config.example_status_persistence_file_path = ".rspec_status"
+
+  # Disable RSpec exposing methods globally on `Module` and `main`
+  config.disable_monkey_patching!
+
+  config.expect_with :rspec do |c|
+    c.syntax = :expect
+  end
+end
 
 unless RUBY_PLATFORM.include?('java')
   require 'simplecov'
@@ -11,6 +20,8 @@ unless RUBY_PLATFORM.include?('java')
   SimpleCov.start unless ENV.key? 'ARUBA_NO_COVERAGE'
 end
 
-# Loading support files
-Dir.glob(File.expand_path('support/*.rb', __dir__)).sort.each { |f| require_relative f }
-Dir.glob(File.expand_path('support/**/*.rb', __dir__)).sort.each { |f| require_relative f }
+mimic_next_major = ENV.fetch("MIMIC_NEXT_MAJOR_VERSION", "false")
+# Require via legacy path until v2.0.0, and unless testing functionality in preparation for next major release
+require 'bom_builder' if mimic_next_major.casecmp?("false")
+# Modern path is already covered by the legacy path, but doesn't hurt to include it twice
+require "cyclonedx/ruby"
