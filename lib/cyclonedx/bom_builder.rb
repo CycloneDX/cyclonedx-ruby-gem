@@ -142,15 +142,17 @@ module Cyclonedx
       end
 
       # Normalize to an absolute project path to avoid relative path issues later
-      @project_path = File.expand_path(@options[:path])
+      @project_path = File.expand_path(@options[:path]) if @options[:path]
       @provided_path = @options[:path]
 
-      begin
-        @logger.info("Changing directory to Ruby project directory located at #{@provided_path}")
-        Dir.chdir @project_path
-      rescue StandardError => e
-        @logger.error("Unable to change directory to Ruby project directory located at #{@provided_path}. #{e.message}: #{Array(e.backtrace).join("\n")}")
-        abort
+      if @project_path
+        begin
+          @logger.info("Changing directory to Ruby project directory located at #{@provided_path}")
+          Dir.chdir @project_path
+        rescue StandardError => e
+          @logger.error("Unable to change directory to Ruby project directory located at #{@provided_path}. #{e.message}: #{Array(e.backtrace).join("\n")}")
+          abort
+        end
       end
 
       if @options[:bom_output_format].nil?
@@ -191,9 +193,9 @@ module Cyclonedx
       if @project_path
         begin
           # Use absolute path so it's correct regardless of current working directory
-        gemfile_path = File.join(@project_path, 'Gemfile.lock')
-        # Compute display path for logs: './Gemfile.lock' when provided path is '.', else '<provided>/Gemfile.lock'
-        display_gemfile_path = (@provided_path == '.' ? './Gemfile.lock' : File.join(@provided_path, 'Gemfile.lock'))
+          gemfile_path = File.join(@project_path, 'Gemfile.lock')
+          # Compute display path for logs: './Gemfile.lock' when provided path is '.', else '<provided>/Gemfile.lock'
+          display_gemfile_path = (@provided_path == '.' ? './Gemfile.lock' : File.join(@provided_path, 'Gemfile.lock'))
           @logger.info("Parsing specs from #{display_gemfile_path}...")
           gemfile_contents = File.read(gemfile_path)
           @specs = Bundler::LockfileParser.new(gemfile_contents).specs
