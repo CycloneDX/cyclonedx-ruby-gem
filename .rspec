@@ -1,0 +1,8 @@
+--format documentation
+--color
+--require spec_helper
+--color
+--order random
+--warnings
+--format html
+--out results/test_results.html
