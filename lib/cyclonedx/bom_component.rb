@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Cyclonedx
   class BomComponent
     DEFAULT_TYPE = "library".freeze

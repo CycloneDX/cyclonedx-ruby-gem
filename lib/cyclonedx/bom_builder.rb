@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Cyclonedx
   class BomBuilder
     SUPPORTED_BOM_FORMATS = %w[xml json]

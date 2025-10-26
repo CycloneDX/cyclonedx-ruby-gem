@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file is part of CycloneDX Ruby Gem.
 #
 # Licensed to the Apache Software Foundation (ASF) under one
@@ -20,7 +22,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright (c) OWASP Foundation. All Rights Reserved.
 #
-# frozen_string_literal: true
 
 require_relative "cyclonedx/ruby"
 require_relative "cyclonedx_deprecated"

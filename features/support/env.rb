@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Based on https://github.com/cucumber/aruba/blob/3b1a6cea6e3ba55370c3396eef0a955aeb40f287/features/support/env.rb
 # Licensed under MIT - https://github.com/cucumber/aruba/blob/3b1a6cea6e3ba55370c3396eef0a955aeb40f287/LICENSE
 

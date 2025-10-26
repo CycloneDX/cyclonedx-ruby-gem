@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Provides tools that allow methods to be deprecated with new releases of the gem.
 #
 # Usage:

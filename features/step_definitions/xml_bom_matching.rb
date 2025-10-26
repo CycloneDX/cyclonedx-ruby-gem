@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Then('the generated XML BOM file {string} matches {string}') do |generated_file, expected_file|
   generated_file_contents = File.read(expand_path(generated_file))
   expected_file_contents = File.read(expand_path(expected_file))

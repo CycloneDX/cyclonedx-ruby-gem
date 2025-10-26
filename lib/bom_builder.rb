@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file is part of CycloneDX Ruby Gem.
 #
 # Licensed to the Apache Software Foundation (ASF) under one

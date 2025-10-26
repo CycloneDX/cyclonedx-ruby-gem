@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Cyclonedx::BomHelpers do
   context '#purl' do
     context "when legacy method is called" do

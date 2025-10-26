@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "cyclonedx/ruby/deprecation"
 
 # Legacy class name kept for compatibility until v2.0.0
