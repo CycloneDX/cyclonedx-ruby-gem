@@ -17,7 +17,7 @@ module Cyclonedx
         @logger.info("Changing directory to the original working directory located at #{original_working_directory}")
         Dir.chdir original_working_directory
       rescue StandardError => e
-        @logger.error("Unable to change directory the original working directory located at #{original_working_directory}. #{e.message}: #{Array(e.backtrace).join("\n")}")
+        @logger.error("Unable to change to the original working directory located at #{original_working_directory}. #{e.message}: #{Array(e.backtrace).join("\n")}")
         abort
       end
 
@@ -44,7 +44,7 @@ module Cyclonedx
       end
     end
 
-    def self.setup(_path)
+    def self.setup(path)
       @options = {}
       OptionParser.new do |opts|
         opts.banner = 'Usage: cyclonedx-ruby [options]'
