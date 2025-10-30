@@ -48,3 +48,7 @@ Appraisal.*.gemfile.lock
 
 # vendor
 /vendor/
+
+# text artifacts
+bom.xml
+bom.json
