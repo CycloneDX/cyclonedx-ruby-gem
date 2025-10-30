@@ -32,20 +32,17 @@ Gem::Specification.new do |spec|
     end
   end
 
-  spec.metadata["homepage_uri"] = "https://#{spec.name.tr('_', '-')}.galtzo.com/"
-  spec.metadata["source_code_uri"] = "#{spec.homepage}/tree/v#{spec.version}"
-  spec.metadata["changelog_uri"] = "#{spec.homepage}/blob/v#{spec.version}/CHANGELOG.md"
-  spec.metadata["bug_tracker_uri"] = "#{spec.homepage}/issues"
+  spec.metadata["homepage_uri"] = "https://github.com/CycloneDX/cyclonedx-ruby-gem?tab=readme-ov-file#readme"
+  spec.metadata["source_code_uri"] = "https://github.com/CycloneDX/cyclonedx-ruby-gem/tree/v#{spec.version}"
+  spec.metadata["changelog_uri"] = "https://github.com/CycloneDX/cyclonedx-ruby-gem/blob/v#{spec.version}/CHANGELOG.md"
+  spec.metadata["bug_tracker_uri"] = "https://github.com/CycloneDX/cyclonedx-ruby-gem/issues"
   spec.metadata["documentation_uri"] = "https://www.rubydoc.info/gems/#{spec.name}/#{spec.version}"
   spec.metadata["funding_uri"] = "https://owasp.org/donate/?reponame=www-project-cyclonedx&title=OWASP+CycloneDX"
-  spec.metadata["wiki_uri"] = "#{spec.homepage}/wiki"
   spec.metadata["rubygems_mfa_required"] = "true"
 
   # Specify which files are part of the released package.
   spec.files = Dir[
-    #
-    # Executables and tasks
-    "exe/*",
+    # Code / tasks / data (NOTE: exe/ is specified via spec.bindir and spec.executables below)
     "lib/**/*.rb",
     "lib/licenses.json",
     # Signatures
