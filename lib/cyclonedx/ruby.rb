@@ -13,10 +13,10 @@ require 'securerandom'
 require 'active_support/core_ext/hash'
 
 # This gem
-require_relative "ruby/version"
-require_relative "bom_helpers"
-require_relative "bom_builder" # depends on bom_helpers
-require_relative "bom_component"
+require_relative 'ruby/version'
+require_relative 'bom_helpers'
+require_relative 'bom_builder' # depends on bom_helpers
+require_relative 'bom_component'
 
 module Cyclonedx
   module Ruby

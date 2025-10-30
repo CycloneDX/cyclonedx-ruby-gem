@@ -22,7 +22,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright (c) OWASP Foundation. All Rights Reserved.
 #
-# frozen_string_literal: true
 
-require_relative "cyclonedx/ruby"
-require_relative "cyclonedx_deprecated"
+require_relative 'cyclonedx/ruby'
+require_relative 'cyclonedx_deprecated'

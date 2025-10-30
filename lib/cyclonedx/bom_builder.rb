@@ -30,7 +30,7 @@ module Cyclonedx
 
       begin
         @logger.info("Writing BOM to #{@bom_file_path}...")
-        File.open(@bom_file_path, 'w') { |file| file.write(bom) }
+        File.write(@bom_file_path, bom)
 
         if @options[:verbose]
           @logger.info("#{@gems.size} gems were written to BOM located at #{@bom_file_path}")
@@ -42,8 +42,8 @@ module Cyclonedx
         abort
       end
     end
-    private
-    def self.setup(path)
+
+    def self.setup(_path)
       @options = {}
       OptionParser.new do |opts|
         opts.banner = 'Usage: cyclonedx-ruby [options]'

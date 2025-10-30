@@ -22,7 +22,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright (c) OWASP Foundation. All Rights Reserved.
 #
-# frozen_string_literal: true
 
 require_relative 'bom_component'
 
@@ -48,15 +47,15 @@ module Cyclonedx
 
     def build_json_bom(gems)
       bom_hash = {
-        "bomFormat": "CycloneDX",
-        "specVersion": "1.1",
-        "serialNumber": random_urn_uuid,
-        "version": 1,
-        "components": []
+        bomFormat: 'CycloneDX',
+        specVersion: '1.1',
+        serialNumber: random_urn_uuid,
+        version: 1,
+        components: []
       }
 
       gems.each do |gem|
-        bom_hash[:components] += BomComponent.new(gem).hash_val()
+        bom_hash[:components] += BomComponent.new(gem).hash_val
       end
 
       JSON.pretty_generate(bom_hash)
@@ -105,7 +104,7 @@ module Cyclonedx
     def get_gem(name, version)
       url = "https://rubygems.org/api/v1/versions/#{name}.json"
       begin
-        RestClient.proxy = ENV['http_proxy']
+        RestClient.proxy = ENV.fetch('http_proxy', nil)
         response = RestClient.get(url)
         body = JSON.parse(response.body)
         body.select { |item| item['number'] == version.to_s }.first

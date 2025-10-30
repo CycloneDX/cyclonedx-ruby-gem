@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "cyclonedx/ruby/deprecation"
+require_relative 'cyclonedx/ruby/deprecation'
 
 # Legacy class name kept for compatibility until v2.0.0
 Bombuilder = Cyclonedx::BomBuilder
@@ -19,4 +19,4 @@ deprecated_alias :instance, :build_bom_xml, :build_bom_xml, Cyclonedx::BomHelper
 deprecated_alias :instance, :get_gem, :get_gem, Cyclonedx::BomHelpers
 
 # Sanity
-raise "Deprecated methods broken" unless purl('activesupport', '7.0.1') == "pkg:gem/activesupport@7.0.1"
+raise 'Deprecated methods broken' unless purl('activesupport', '7.0.1') == 'pkg:gem/activesupport@7.0.1'

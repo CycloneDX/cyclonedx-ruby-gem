@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.license     = 'Apache-2.0'
   spec.required_ruby_version = '>= 2.7.0'
 
-  spec.metadata["homepage_uri"] = "https://#{spec.name.tr("_", "-")}.galtzo.com/"
+  spec.metadata["homepage_uri"] = "https://#{spec.name.tr('_', '-')}.galtzo.com/"
   spec.metadata["source_code_uri"] = "#{spec.homepage}/tree/v#{spec.version}"
   spec.metadata["changelog_uri"] = "#{spec.homepage}/blob/v#{spec.version}/CHANGELOG.md"
   spec.metadata["bug_tracker_uri"] = "#{spec.homepage}/issues"
@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
     "lib/**/*.rb",
     "lib/licenses.json",
     # Signatures
-    "sig/**/*.rbs",
+    "sig/**/*.rbs"
   ]
 
   # Automatically included with gem package, no need to list again in files.
@@ -39,7 +39,7 @@ Gem::Specification.new do |spec|
     # Files (alphabetical)
     "CHANGELOG.md",
     "LICENSE.txt",
-    "README.md",
+    "README.md"
   ]
   spec.rdoc_options += [
     "--title",
@@ -50,7 +50,7 @@ Gem::Specification.new do |spec|
     "^sig/",
     "--line-numbers",
     "--inline-source",
-    "--quiet",
+    "--quiet"
   ]
   spec.require_paths = ['lib']
   spec.bindir = "exe"

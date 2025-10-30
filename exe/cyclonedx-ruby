@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-if ENV.fetch("MIMIC_NEXT_MAJOR_VERSION", "false").casecmp?("true")
+if ENV.fetch('MIMIC_NEXT_MAJOR_VERSION', 'false').casecmp?('true')
   require 'cyclonedx/ruby'
   Cyclonedx::BomBuilder.build(ARGV[0])
 else

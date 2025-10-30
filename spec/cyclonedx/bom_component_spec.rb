@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples "a valid hash_val result for gem" do
+RSpec.shared_examples 'a valid hash_val result for gem' do
   it { expect(result.count).to eq(1) }
   it { expect(result[0][:type]).to eq('library') }
   it { expect(result[0][:name]).to eq(gem.name) }
