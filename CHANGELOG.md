@@ -29,6 +29,11 @@ Please file a bug if you notice a violation of semantic versioning.
 - `Cyclonedx::Ruby::Deprecation` module to help manage deprecations
 - dev dependency: `stone_checksums`
   - For SHA-256 and SHA-512 checksum generation for each release.
+- signed gem releases
+  - See: [RubyGems Security Guide][🔒️rubygems-security-guide]
+- CI matrix testing on Ruby 3.3, 3.4
+
+[🔒️rubygems-security-guide]: https://guides.rubygems.org/security/#building-gems
 
 ### Changed
 
