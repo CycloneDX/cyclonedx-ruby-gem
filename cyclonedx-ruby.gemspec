@@ -57,6 +57,7 @@ Gem::Specification.new do |spec|
     # Files (alphabetical)
     "CHANGELOG.md",
     "LICENSE.txt",
+    "NOTICE",
     "README.md"
   ]
   spec.rdoc_options += [
