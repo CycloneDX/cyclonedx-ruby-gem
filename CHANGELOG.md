@@ -2,7 +2,7 @@
 
 [![SemVer 2.0.0][📌semver-img]][📌semver] [![Keep-A-Changelog 1.0.0][📗keep-changelog-img]][📗keep-changelog]
 
-All notable changes to this project will be documented in this file.
+All notable changes to this project after v1.1.0 will be documented in this file.
 
 The format is based on [Keep a Changelog][📗keep-changelog],
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html),
@@ -20,12 +20,15 @@ Please file a bug if you notice a violation of semantic versioning.
 
 ### Added
 
+- `CONTRIBUTING.md` file to help people find their way to contributing
 - `CHANGELOG.md` file to document notable changes in keep-a-changelog format
 - `Cyclonedx::BomHelpers` module to house helper methods, replacing global methods
 - `Cyclonedx::BomBuilder` class, replacing `Bombuilder` (note the capitalization change)
 - `Cyclonedx::BomComponent` class, replacing `BomComponent`
 - `Cyclonedx::Ruby::Version::VERSION` constant to hold the version number (also available as `Cyclonedx::VERSION`)
 - `Cyclonedx::Ruby::Deprecation` module to help manage deprecations
+- dev dependency: `stone_checksums`
+  - For SHA-256 and SHA-512 checksum generation for each release.
 
 ### Changed
 
@@ -66,5 +69,6 @@ Please file a bug if you notice a violation of semantic versioning.
 
 - Initial release
 
+[Unreleased]: https://gitlab.com/CycloneDX/cyclonedx-ruby-gem/-/compare/v1.1.0...HEAD
 [1.1.0]: https://github.com/CycloneDX/cyclonedx-ruby-gem/compare/eecfebe3cb0ce961fef8e424162ac94298f02a9f...v1.1.0
 [1.1.0t]: https://github.com/CycloneDX/cyclonedx-ruby-gem/releases/tag/v1.1.0

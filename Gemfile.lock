@@ -11,7 +11,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (7.2.2.2)
+    activesupport (7.2.3)
       base64
       benchmark (>= 0.3)
       bigdecimal
@@ -90,13 +90,9 @@ GEM
       mime-types-data (~> 3.2025, >= 3.2025.0507)
     mime-types-data (3.2025.0924)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.9)
     minitest (5.26.0)
     multi_test (1.1.0)
     netrc (0.11.0)
-    nokogiri (1.18.10)
-      mini_portile2 (~> 2.8.2)
-      racc (~> 1.4)
     nokogiri (1.18.10-aarch64-linux-gnu)
       racc (~> 1.4)
     nokogiri (1.18.10-aarch64-linux-musl)
@@ -115,13 +111,13 @@ GEM
       racc (~> 1.4)
     ostruct (0.5.5)
     parallel (1.27.0)
-    parser (3.3.9.0)
+    parser (3.3.10.0)
       ast (~> 2.4.1)
       racc
     prism (1.6.0)
     racc (1.8.1)
     rainbow (3.1.1)
-    rake (13.3.0)
+    rake (13.3.1)
     regexp_parser (2.11.3)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
@@ -163,6 +159,8 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.13.2)
     simplecov_json_formatter (0.1.4)
+    stone_checksums (1.0.3)
+      version_gem (~> 1.1, >= 1.1.9)
     sys-uname (1.4.1)
       ffi (~> 1.1)
       memoist3 (~> 1.0.0)
@@ -172,6 +170,7 @@ GEM
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.1.0)
+    version_gem (1.1.9)
 
 PLATFORMS
   aarch64-linux-gnu
@@ -179,7 +178,6 @@ PLATFORMS
   arm-linux-gnu
   arm-linux-musl
   arm64-darwin
-  ruby
   x86_64-darwin
   x86_64-linux-gnu
   x86_64-linux-musl
@@ -192,6 +190,7 @@ DEPENDENCIES
   rspec (~> 3.12)
   rubocop (~> 1.54)
   simplecov (~> 0.22.0)
+  stone_checksums (~> 1.0, >= 1.0.3)
 
 BUNDLED WITH
    2.7.2
