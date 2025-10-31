@@ -9,7 +9,7 @@
 
 # CycloneDX Ruby Gem
 
-The CycloneDX Ruby Gem creates a valid CycloneDX Software Bill of Materials (SBOM) from all project dependencies. CycloneDX is a lightweight SBOM specification that is easily created, human readable, and simple to parse. 
+The CycloneDX Ruby Gem creates a valid CycloneDX Software Bill of Materials (SBOM) from all project dependencies. CycloneDX is a lightweight SBOM specification that is easily created, human-readable, and simple to parse. 
 
 #### Installing from RubyGems
 

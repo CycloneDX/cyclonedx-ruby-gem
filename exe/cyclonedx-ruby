@@ -1,5 +1,10 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'bom_builder'
-Bombuilder.build(ARGV[0])
+if ENV.fetch('MIMIC_NEXT_MAJOR_VERSION', 'false').casecmp?('true')
+  require 'cyclonedx/ruby'
+  Cyclonedx::BomBuilder.build(ARGV[0])
+else
+  require 'bom_builder'
+  Bombuilder.build(ARGV[0])
+end
