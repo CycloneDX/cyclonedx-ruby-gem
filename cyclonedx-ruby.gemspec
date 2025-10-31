@@ -18,7 +18,6 @@ Gem::Specification.new do |spec|
   spec.metadata["source_code_uri"] = "https://github.com/CycloneDX/cyclonedx-ruby-gem/tree/v#{spec.version}"
   spec.metadata["changelog_uri"] = "https://github.com/CycloneDX/cyclonedx-ruby-gem/blob/v#{spec.version}/CHANGELOG.md"
   spec.metadata["bug_tracker_uri"] = "https://github.com/CycloneDX/cyclonedx-ruby-gem/issues"
-  spec.metadata["documentation_uri"] = "https://www.rubydoc.info/gems/#{spec.name}/#{spec.version}"
   spec.metadata["funding_uri"] = "https://owasp.org/donate/?reponame=www-project-cyclonedx&title=OWASP+CycloneDX"
   spec.metadata["rubygems_mfa_required"] = "true"
 
