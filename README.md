@@ -9,7 +9,7 @@
 
 # CycloneDX Ruby Gem
 
-The CycloneDX Ruby Gem creates a valid CycloneDX Software Bill of Materials (SBOM) from all project dependencies. CycloneDX is a lightweight SBOM specification that is easily created, human readable, and simple to parse. 
+The CycloneDX Ruby Gem creates a valid CycloneDX Software Bill of Materials (SBOM) from all project dependencies. CycloneDX is a lightweight SBOM specification that is easily created, human-readable, and simple to parse. 
 
 #### Installing from RubyGems
 
@@ -29,14 +29,36 @@ cyclonedx-ruby [options]
 
     `-v, --[no-]verbose` Run verbosely
     `-p, --path path` Path to Ruby project directory
-    `-f, --format` Bom output format
+    `-o, --output bom_file_path` Path to output the bom file
+    `-f, --format bom_output_format` Output format for bom. Supported: xml (default), json
+    `-s, --spec-version version` CycloneDX spec version to target (default: 1.7). Supported: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7
+    `--include-metadata` Include metadata.tools identifying cyclonedx-ruby as the producer
+    `--validate` Validate the produced BOM against the selected CycloneDX schema
+    `--validate-file PATH` Validate an existing BOM file instead of generating one
     `-h, --help` Show help message
 
 **Output:** bom.xml or bom.json file in project directory
 
-#### Example
+- By default, outputs conform to CycloneDX spec version 1.7.
+- To generate an older spec version, use `--spec-version`.
+- To embed metadata about this tool (vendor/name/version) into the BOM, pass `--include-metadata` (supported for spec >= 1.2).
+
+#### Examples
 ```bash
+# Default (XML, CycloneDX 1.7)
 cyclonedx-ruby -p /path/to/ruby/project
+
+# JSON at CycloneDX 1.7
+cyclonedx-ruby -p /path/to/ruby/project -f json
+
+# XML at CycloneDX 1.3
+cyclonedx-ruby -p /path/to/ruby/project -s 1.3
+
+# JSON at CycloneDX 1.2 to a custom path
+cyclonedx-ruby -p /path/to/ruby/project -f json -s 1.2 -o bom/out.json
+
+# Include producer metadata and validate
+cyclonedx-ruby -p /path/to/ruby/project --include-metadata --validate
 ```
 
 
@@ -47,5 +69,4 @@ CycloneDX Ruby Gem is Copyright (c) OWASP Foundation. All Rights Reserved.
 
 Permission to modify and redistribute is granted under the terms of the Apache 2.0 license. See the [LICENSE] file for the full license.
 
-[License]: https://github.com/CycloneDX/cyclonedx-ruby-gem/blob/master/LICENSE
-
+[License]: https://github.com/CycloneDX/cyclonedx-ruby-gem/blob/master/LICENSE.txt

@@ -1,1 +1,2 @@
-default: --publish-quiet
+default: --publish-quiet --format progress features
+

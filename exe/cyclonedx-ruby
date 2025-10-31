@@ -1,5 +1,14 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'bom_builder'
-Bombuilder.build(ARGV[0])
+if ENV.fetch('MIMIC_NEXT_MAJOR_VERSION', 'false').casecmp?('true')
+  require 'cyclonedx/ruby'
+  path_arg = ARGV[0]
+  path_arg = nil if path_arg&.start_with?('-')
+  Cyclonedx::BomBuilder.build(path_arg)
+else
+  require 'bom_builder'
+  path_arg = ARGV[0]
+  path_arg = nil if path_arg&.start_with?('-')
+  Bombuilder.build(path_arg)
+end
