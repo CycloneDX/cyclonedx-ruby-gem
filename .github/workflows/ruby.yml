@@ -18,10 +18,14 @@ jobs:
       fail-fast: false
       matrix:
         ruby:
-          - '3.2.2'
-          - '3.1.4'
-          - '3.0.6'
-          - '2.7.7'
+          - '3.4.7'
+          - '3.3.9'
+          - '3.2.9'
+# Not supported by latest bundler. These will be added back to the build matrix later.
+#    They are not being dropped from support, just from CI testing for now.
+#          - '3.1.7'
+#          - '3.0.7'
+#          - '2.7.8'
 
     steps:
     - uses: actions/checkout@v3

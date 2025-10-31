@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Copied from https://github.com/cucumber/aruba/blob/3b1a6cea6e3ba55370c3396eef0a955aeb40f287/features/support/simplecov_setup.rb
 # Licensed under MIT - https://github.com/cucumber/aruba/blob/3b1a6cea6e3ba55370c3396eef0a955aeb40f287/LICENSE
 
