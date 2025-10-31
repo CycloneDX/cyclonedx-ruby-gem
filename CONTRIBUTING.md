@@ -28,10 +28,6 @@ General/runtime
 - MIMIC_NEXT_MAJOR_VERSION: When set to true, simulates the next major version for testing breaking changes [📌semver-breaking] [📌major-versions-not-sacred] (default: false)
 - ARUBA_NO_COVERAGE: Disable SimpleCov coverage in Aruba tests (default: false)
 
-Releasing and signing
-- SKIP_GEM_SIGNING: If set, skip gem signing during build/release
-- GEM_CERT_USER: Username for selecting your public cert in `certs/<USER>.pem` (defaults to $USER)
-
 For a quick starting point, this repository’s `.envrc` shows sane defaults, and `.env.local` can override them locally.
 
 ## Testing
@@ -89,16 +85,6 @@ Your picture could be here!
 Made with [contributors-img][🖐contrib-rocks].
 
 ## For Maintainers
-
-### One-time, Per-maintainer, Setup
-
-**IMPORTANT**: To sign a build,
-a public key for signing gems will need to be picked up by the line in the
-`gemspec` defining the `spec.cert_chain` (check the relevant ENV variables there).
-All releases after v1.1.0 are signed releases.
-See: [RubyGems Security Guide][🔒️rubygems-security-guide]
-
-NOTE: To build without signing the gem set `SKIP_GEM_SIGNING` to any value in the environment. Only do this for testing.
 
 ### To release a new version:
 
