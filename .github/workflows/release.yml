@@ -26,6 +26,17 @@ jobs:
       id: version
       run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
     
+    - name: Verify version matches code
+      run: |
+        TAG_VERSION="${{ steps.version.outputs.VERSION }}"
+        CODE_VERSION=$(ruby -r ./lib/cyclonedx/ruby/version.rb -e 'puts Cyclonedx::Ruby::VERSION')
+        echo "Tag version: $TAG_VERSION"
+        echo "Code version: $CODE_VERSION"
+        if [ "$TAG_VERSION" != "$CODE_VERSION" ]; then
+          echo "::error::Version mismatch! Tag is v$TAG_VERSION but code version is $CODE_VERSION"
+          exit 1
+        fi
+    
     - name: Determine if prerelease
       id: prerelease
       run: |
@@ -78,6 +89,13 @@ jobs:
       with:
         ruby-version: '3.3'
         bundler-cache: true
+    
+    - name: Check for RubyGems API key
+      run: |
+        if [ -z "${{ secrets.RUBYGEMS_API_KEY }}" ]; then
+          echo "::error::RUBYGEMS_API_KEY secret is not set"
+          exit 1
+        fi
     
     - name: Build gem
       run: bundle exec rake build
