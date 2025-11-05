@@ -5,14 +5,12 @@ on:
     tags:
       - 'v*'
 
-# see https://docs.github.com/en/actions/how-tos/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-github_token
-permissions:
-  contents: write
-  packages: write
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    # see https://docs.github.com/en/actions/how-tos/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-github_token
+    permissions:
+      contents: write
     steps:
     - uses: actions/checkout@v4
     
