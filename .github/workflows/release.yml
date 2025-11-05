@@ -10,11 +10,11 @@ on:
 permissions: {}
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
-    # see https://docs.github.com/en/actions/how-tos/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-github_token
-    permissions:
-      contents: write
+    outputs:
+      version: ${{ steps.version.outputs.VERSION }}
+      prerelease: ${{ steps.prerelease.outputs.PRERELEASE }}
     steps:
     - uses: actions/checkout@v4
     
@@ -56,9 +56,39 @@ jobs:
           echo "PRERELEASE=true" >> $GITHUB_OUTPUT
           echo "Detected prerelease: $VERSION"
         fi
+  
+  test:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.3'
+        bundler-cache: false
+    
+    - name: Install dependencies
+      run: bundle install --jobs 4 --retry 3
     
     - name: Run tests
       run: bundle exec rake test
+  
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.3'
+        bundler-cache: false
+    
+    - name: Install dependencies
+      run: bundle install --jobs 4 --retry 3
     
     - name: Build gem
       run: bundle exec rake build
@@ -76,20 +106,32 @@ jobs:
         path: |
           pkg/*.gem
           checksums/*.sha512
+  
+  release-github:
+    needs: [validate, build]
+    runs-on: ubuntu-latest
+    # GitHub release creation requires contents:write to create releases
+    permissions:
+      contents: write
+    steps:
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: gem-package
     
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          pkg/*.gem
-          checksums/*.sha512
-        prerelease: ${{ steps.prerelease.outputs.PRERELEASE }}
+          *.gem
+          *.sha512
+        prerelease: ${{ needs.validate.outputs.prerelease }}
         generate_release_notes: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
-  publish:
-    needs: build
+  release-rubygems:
+    needs: [validate, build]
     runs-on: ubuntu-latest
     if: github.repository == 'CycloneDX/cyclonedx-ruby-gem'
     steps:
@@ -101,9 +143,6 @@ jobs:
         ruby-version: '3.3'
         bundler-cache: false
     
-    - name: Install dependencies
-      run: bundle install --jobs 4 --retry 3
-    
     - name: Check for RubyGems API key
       run: |
         if [ -z "${{ secrets.RUBYGEMS_API_KEY }}" ]; then
@@ -111,8 +150,10 @@ jobs:
           exit 1
         fi
     
-    - name: Build gem
-      run: bundle exec rake build
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: gem-package
     
     - name: Publish to RubyGems
       run: |
@@ -122,6 +163,6 @@ jobs:
         :rubygems_api_key: ${RUBYGEMS_API_KEY}
         EOF
         chmod 0600 ~/.gem/credentials
-        bundle exec gem push pkg/*.gem
+        gem push *.gem
       env:
         RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
