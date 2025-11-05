@@ -89,4 +89,4 @@ Check that:
 
 ### Prerelease not detected correctly
 
-Ensure your tag follows the format `v<VERSION>-<PRERELEASE>` where `<PRERELEASE>` contains a hyphen or dot (e.g., `alpha.1`, `beta-2`, `rc.1`).
+The workflow detects prereleases by checking if the version matches the exact pattern `MAJOR.MINOR.PATCH` (e.g., `1.2.3`). Any version that includes additional characters after the patch version (e.g., `1.2.3-alpha.1`, `1.2.3.rc1`, `1.2.3-beta`) is automatically marked as a prerelease.

@@ -29,7 +29,7 @@ jobs:
     - name: Verify version matches code
       run: |
         TAG_VERSION="${{ steps.version.outputs.VERSION }}"
-        CODE_VERSION=$(ruby -r ./lib/cyclonedx/ruby/version.rb -e 'puts Cyclonedx::Ruby::VERSION')
+        CODE_VERSION=$(bundle exec ruby -r ./lib/cyclonedx/ruby/version.rb -e 'puts Cyclonedx::Ruby::VERSION')
         echo "Tag version: $TAG_VERSION"
         echo "Code version: $CODE_VERSION"
         if [ "$TAG_VERSION" != "$CODE_VERSION" ]; then
@@ -40,10 +40,16 @@ jobs:
     - name: Determine if prerelease
       id: prerelease
       run: |
-        if [[ "${{ steps.version.outputs.VERSION }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        VERSION="${{ steps.version.outputs.VERSION }}"
+        # A version is a prerelease if it contains anything after the patch version
+        # e.g., 1.2.3-alpha.1, 1.2.3.rc1, 1.2.3-beta are all prereleases
+        # but 1.2.3 is a stable release
+        if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
           echo "PRERELEASE=false" >> $GITHUB_OUTPUT
+          echo "Detected stable release: $VERSION"
         else
           echo "PRERELEASE=true" >> $GITHUB_OUTPUT
+          echo "Detected prerelease: $VERSION"
         fi
     
     - name: Run tests
