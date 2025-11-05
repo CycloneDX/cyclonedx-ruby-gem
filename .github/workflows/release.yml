@@ -1,0 +1,95 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+# see https://docs.github.com/en/actions/how-tos/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-github_token
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.3'
+        bundler-cache: true
+    
+    - name: Extract version from tag
+      id: version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+    
+    - name: Determine if prerelease
+      id: prerelease
+      run: |
+        if [[ "${{ steps.version.outputs.VERSION }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo "PRERELEASE=false" >> $GITHUB_OUTPUT
+        else
+          echo "PRERELEASE=true" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Run tests
+      run: bundle exec rake test
+    
+    - name: Build gem
+      run: bundle exec rake build
+    
+    - name: Generate checksum
+      run: bundle exec rake build:checksum
+    
+    - name: List build artifacts
+      run: ls -lh pkg/ checksums/
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: gem-package
+        path: |
+          pkg/*.gem
+          checksums/*.sha512
+    
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          pkg/*.gem
+          checksums/*.sha512
+        prerelease: ${{ steps.prerelease.outputs.PRERELEASE }}
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.repository == 'CycloneDX/cyclonedx-ruby-gem'
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.3'
+        bundler-cache: true
+    
+    - name: Build gem
+      run: bundle exec rake build
+    
+    - name: Publish to RubyGems
+      run: |
+        mkdir -p ~/.gem
+        cat << EOF > ~/.gem/credentials
+        ---
+        :rubygems_api_key: ${RUBYGEMS_API_KEY}
+        EOF
+        chmod 0600 ~/.gem/credentials
+        bundle exec gem push pkg/*.gem
+      env:
+        RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}

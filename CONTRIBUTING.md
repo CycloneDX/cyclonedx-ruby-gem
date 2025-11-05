@@ -88,9 +88,32 @@ Made with [contributors-img][🖐contrib-rocks].
 
 ### To release a new version:
 
-#### Automated process
+#### Automated process (Recommended)
 
-Coming Soon!
+The repository has a GitHub Actions workflow that automates the release process:
+
+1. Run `bin/setup && bin/rake` as a "test, coverage, & linting" sanity check
+2. Update the version number in `version.rb`, and ensure `CHANGELOG.md` reflects changes
+3. Run `bin/setup && bin/rake` again as a secondary check, and to update `Gemfile.lock`
+4. Run `git commit -am "🔖 Prepare release v<VERSION>"` to commit the changes
+5. Run `git push` to trigger the final CI pipeline before release, and merge PRs
+    - NOTE: Remember to [check the build][🧪build].
+6. Run `export GIT_TRUNK_BRANCH_NAME="$(git remote show origin | grep 'HEAD branch' | cut -d ' ' -f5)" && echo $GIT_TRUNK_BRANCH_NAME`
+7. Run `git checkout $GIT_TRUNK_BRANCH_NAME`
+8. Run `git pull origin $GIT_TRUNK_BRANCH_NAME` to ensure latest trunk code
+9. Create and push a git tag for the version:
+    - For stable releases: `git tag v<VERSION>` (e.g., `v1.2.0`)
+    - For prereleases: `git tag v<VERSION>-<PRERELEASE>` (e.g., `v1.3.0-alpha.1`, `v1.3.0-beta.2`, `v1.3.0-rc.1`)
+10. Run `git push origin v<VERSION>` to push the tag and trigger the release workflow
+
+The workflow will:
+- Run all tests to ensure code quality
+- Build the gem package
+- Generate SHA-512 checksums
+- Create a GitHub Release with the gem and checksums as artifacts
+- Publish the gem to RubyGems.org (requires `RUBYGEMS_API_KEY` secret to be configured)
+
+**Note:** Prereleases are automatically detected based on the version tag format. Any tag that includes a prerelease identifier (alpha, beta, rc, etc.) will be marked as a prerelease on GitHub.
 
 #### Manual process
 

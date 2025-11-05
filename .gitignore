@@ -1,6 +1,7 @@
 # Build Artifacts
 /pkg/
 /tmp/
+/checksums/
 *.gem
 
 # Bundler
