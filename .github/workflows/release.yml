@@ -1,9 +1,13 @@
 name: Release
 
+run-name: Release ${{ github.ref_name }}
+
 on:
   push:
     tags:
       - 'v*'
+
+permissions: {}
 
 jobs:
   build:
@@ -18,7 +22,10 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: '3.3'
-        bundler-cache: true
+        bundler-cache: false
+    
+    - name: Install dependencies
+      run: bundle install --jobs 4 --retry 3
     
     - name: Extract version from tag
       id: version
@@ -92,7 +99,10 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: '3.3'
-        bundler-cache: true
+        bundler-cache: false
+    
+    - name: Install dependencies
+      run: bundle install --jobs 4 --retry 3
     
     - name: Check for RubyGems API key
       run: |
