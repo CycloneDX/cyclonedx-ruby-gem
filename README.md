@@ -1,6 +1,6 @@
 # CycloneDX Ruby Gem
 
-[![Gem Version](https://img.shields.io/gem/v/cyclonedx-ruby)](https://rubygems.org/gems/cyclonedx-ruby)
+[![Gem Version](https://img.shields.io/gem/v/cyclonedx-ruby?logo=rubygems&logoColor=white)](https://rubygems.org/gems/cyclonedx-ruby)
 [![CT status](https://img.shields.io/github/actions/workflow/status/CycloneDX/cyclonedx-ruby-gem/ruby.yml?branch=master&logo=GitHub&logoColor=white)](https://github.com/CycloneDX/cyclonedx-ruby-gem/actions/workflows/ruby.yml?query=branch%3Amaster)
 [![License](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)][License]  
 [![Website](https://img.shields.io/badge/https://-cyclonedx.org-blue.svg)](https://cyclonedx.org/)
