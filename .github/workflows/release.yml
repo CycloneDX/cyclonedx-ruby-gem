@@ -120,15 +120,18 @@ jobs:
         name: gem-package
     
     - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: |
-          *.gem
-          *.sha512
-        prerelease: ${{ needs.validate.outputs.prerelease }}
-        generate_release_notes: true
+      run: |
+        PRERELEASE_FLAG=""
+        if [ "${{ needs.validate.outputs.prerelease }}" = "true" ]; then
+          PRERELEASE_FLAG="--prerelease"
+        fi
+        gh release create "${{ github.ref_name }}" \
+          *.gem *.sha512 \
+          --title "${{ github.ref_name }}" \
+          --generate-notes \
+          $PRERELEASE_FLAG
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
   release-rubygems:
     needs: [validate, build]
