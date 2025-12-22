@@ -14,9 +14,10 @@ require 'active_support/core_ext/hash'
 
 # This gem
 require_relative 'ruby/version'
-require_relative 'bom_helpers'
+require_relative 'field_accessor' # shared utility with no dependencies
+require_relative 'bom_component' # depends on field_accessor
+require_relative 'bom_helpers' # depends on field_accessor and bom_component
 require_relative 'bom_builder' # depends on bom_helpers
-require_relative 'bom_component'
 
 module Cyclonedx
   module Ruby

@@ -11,7 +11,7 @@ module Cyclonedx
       original_working_directory = Dir.pwd
       setup(path)
       specs_list
-      bom = build_bom(@gems, @bom_output_format, @spec_version)
+      bom = build_bom(@gems, @bom_output_format, @spec_version, include_metadata: @options[:include_metadata], include_enrichment: @options[:enrich_components])
 
       begin
         @logger.info("Changing directory to the original working directory located at #{original_working_directory}")
@@ -44,6 +44,8 @@ module Cyclonedx
       end
     end
 
+    private
+
     def self.setup(path)
       @options = {}
       OptionParser.new do |opts|
@@ -63,6 +65,18 @@ module Cyclonedx
         end
         opts.on('-s', '--spec-version version', '(Optional) CycloneDX spec version to target (default: 1.7). Supported: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7') do |spec_version|
           @options[:spec_version] = spec_version
+        end
+        opts.on('--include-metadata', 'Include metadata.tools identifying cyclonedx-ruby as the producer') do
+          @options[:include_metadata] = true
+        end
+        opts.on('--enrich-components', 'Include bom-ref and publisher fields on components (uses purl and first author)') do
+          @options[:enrich_components] = true
+        end
+        opts.on('--gem-server URL', 'Gem server URL to fetch gem metadata (default: https://gem.coop)') do |gem_server|
+          @options[:gem_server] = gem_server
+        end
+        opts.on('--validate', 'Validate the BOM against CycloneDX schema (currently a no-op)') do
+          @options[:validate] = true
         end
         opts.on_tail('-h', '--help', 'Show help message') do
           puts opts
@@ -100,11 +114,16 @@ module Cyclonedx
       @project_path = File.expand_path(@options[:path])
       @provided_path = @options[:path]
 
-      begin
-        @logger.info("Changing directory to Ruby project directory located at #{@provided_path}")
-        Dir.chdir @project_path
-      rescue StandardError => e
-        @logger.error("Unable to change directory to Ruby project directory located at #{@provided_path}. #{e.message}: #{Array(e.backtrace).join("\n")}")
+      if @project_path
+        begin
+          @logger.info("Changing directory to Ruby project directory located at #{@provided_path}")
+          Dir.chdir @project_path
+        rescue StandardError => e
+          @logger.error("Unable to change directory to Ruby project directory located at #{@provided_path}. #{e.message}: #{Array(e.backtrace).join("\n")}")
+          abort
+        end
+      else
+        @logger.error("project_path could not be determined. path provided was: #{@options[:path]}")
         abort
       end
 
@@ -156,7 +175,7 @@ module Cyclonedx
         object.name = dependency.name
         object.version = dependency.version
         object.purl = purl(object.name, object.version)
-        gem = get_gem(object.name, object.version, @logger)
+        gem = get_gem(object.name, object.version, @logger, @options[:gem_server])
         next if gem.nil?
 
         if gem['licenses']&.length&.positive?

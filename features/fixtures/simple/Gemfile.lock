@@ -1,5 +1,5 @@
 GEM
-  remote: https://rubygems.org/
+  remote: https://gem.coop/
   specs:
     activesupport (7.0.4.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)

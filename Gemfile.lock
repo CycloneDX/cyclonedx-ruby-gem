@@ -9,7 +9,7 @@ PATH
       rest-client (~> 2.0)
 
 GEM
-  remote: https://rubygems.org/
+  remote: https://gem.coop/
   specs:
     activesupport (7.2.3)
       base64
