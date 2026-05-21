@@ -11,6 +11,7 @@
 /gemfiles/.bundle/config
 /gemfiles/vendor/
 Appraisal.*.gemfile.lock
+Gemfile.lock
 
 # Specs
 .rspec_status
