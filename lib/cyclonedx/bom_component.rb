@@ -22,27 +22,21 @@ module Cyclonedx
         description: @description,
         purl: @purl,
         hashes: [
-          {
-            alg: HASH_ALG,
-            content: @hash
-          }
+          alg: HASH_ALG,
+          content: @hash
         ]
       }
 
       if @gem['license_id']
         component_hash[:licenses] = [
-          {
-            license: {
-              id: @gem['license_id']
-            }
+          license: {
+            id: @gem['license_id']
           }
         ]
       elsif @gem['license_name']
         component_hash[:licenses] = [
-          {
-            license: {
-              name: @gem['license_name']
-            }
+          license: {
+            name: @gem['license_name']
           }
         ]
       end
