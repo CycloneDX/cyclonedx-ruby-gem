@@ -147,8 +147,8 @@ jobs:
         PRERELEASE_FLAG=""
         mapfile -t GEM_FILES < <(find release-assets -type f -name '*.gem')
         mapfile -t CHECKSUM_FILES < <(find release-assets -type f -name '*.sha512')
-        if [ "${#GEM_FILES[@]}" -eq 0 ] || [ "${#CHECKSUM_FILES[@]}" -eq 0 ]; then
-          echo "::error::Expected .gem and .sha512 files from build artifact download"
+        if [ "${#GEM_FILES[@]}" -ne 1 ] || [ "${#CHECKSUM_FILES[@]}" -ne 1 ]; then
+          echo "::error::Expected exactly one .gem and one .sha512 from build artifact download"
           exit 1
         fi
         if [ "${{ needs.validate.outputs.prerelease }}" = "true" ]; then
