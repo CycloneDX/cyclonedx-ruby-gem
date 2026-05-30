@@ -1,158 +1,28 @@
-name: Release
-
-run-name: Release ${{ github.ref_name }}
+name: Push gem
 
 on:
   push:
     tags:
-      - 'v*'
-
-permissions: {}
+      - "v*"
 
 jobs:
-  validate:
+  push:
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.version.outputs.VERSION }}
-      prerelease: ${{ steps.prerelease.outputs.PRERELEASE }}
-    steps:
-    - uses: actions/checkout@v6
-    
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '3.3'
-        bundler-cache: false
-    
-    - name: Install dependencies
-      run: bundle install --jobs 4 --retry 3
-    
-    - name: Extract version from tag
-      id: version
-      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-    
-    - name: Verify version matches code
-      run: |
-        TAG_VERSION="${{ steps.version.outputs.VERSION }}"
-        CODE_VERSION=$(bundle exec ruby -r ./lib/cyclonedx/ruby/version.rb -e 'puts Cyclonedx::Ruby::VERSION')
-        echo "Tag version: $TAG_VERSION"
-        echo "Code version: $CODE_VERSION"
-        if [ "$TAG_VERSION" != "$CODE_VERSION" ]; then
-          echo "::error::Version mismatch! Tag is v$TAG_VERSION but code version is $CODE_VERSION"
-          exit 1
-        fi
-    
-    - name: Determine if prerelease
-      id: prerelease
-      run: |
-        VERSION="${{ steps.version.outputs.VERSION }}"
-        # A version is a prerelease if it contains anything after the patch version
-        # e.g., 1.2.3-alpha.1, 1.2.3.rc1, 1.2.3-beta are all prereleases
-        # but 1.2.3 is a stable release
-        if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-          echo "PRERELEASE=false" >> $GITHUB_OUTPUT
-          echo "Detected stable release: $VERSION"
-        else
-          echo "PRERELEASE=true" >> $GITHUB_OUTPUT
-          echo "Detected prerelease: $VERSION"
-        fi
-  
-  test:
-    needs: validate
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v6
-    
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '3.3'
-        bundler-cache: false
-    
-    - name: Install dependencies
-      run: bundle install --jobs 4 --retry 3
-    
-    - name: Run tests
-      run: bundle exec rake test
-  
-  build:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v6
-    
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '3.3'
-        bundler-cache: false
-    
-    - name: Install dependencies
-      run: bundle install --jobs 4 --retry 3
-    
-    - name: Build gem
-      run: bundle exec rake build
-    
-    - name: Generate checksum
-      run: bundle exec rake build:checksum
-    
-    - name: List build artifacts
-      run: ls -lh pkg/ checksums/
-    
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: gem-package
-        path: |
-          pkg/*.gem
-          checksums/*.sha512
-  
-  release-rubygems:
-    needs: [validate, build]
-    runs-on: ubuntu-latest
-    if: github.repository == 'CycloneDX/cyclonedx-ruby-gem'
-    permissions:
-      id-token: write
-    steps:
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '3.3'
-        bundler-cache: false
 
-    - name: Download build artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: gem-package
-
-    - name: Configure RubyGems credentials
-      uses: rubygems/configure-rubygems-credentials@v1
-
-    - name: Publish to RubyGems
-      run: gem push *.gem
-
-  release-github:
-    needs: [validate, build, release-rubygems]
-    runs-on: ubuntu-latest
-    # GitHub release creation requires contents:write to create releases
     permissions:
       contents: write
+      id-token: write
+
+    environment: release
+
     steps:
-    - name: Download build artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: gem-package
-    
-    - name: Create GitHub Release
-      run: |
-        PRERELEASE_FLAG=""
-        if [ "${{ needs.validate.outputs.prerelease }}" = "true" ]; then
-          PRERELEASE_FLAG="--prerelease"
-        fi
-        gh release create "${{ github.ref_name }}" \
-          *.gem *.sha512 \
-          --title "${{ github.ref_name }}" \
-          --generate-notes \
-          $PRERELEASE_FLAG
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: ruby
+
+      - uses: rubygems/release-gem@v1
