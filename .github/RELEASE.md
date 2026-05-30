@@ -9,8 +9,8 @@ The release workflow (`.github/workflows/release.yml`) is triggered when a versi
 1. **Runs tests** - Ensures all tests pass before releasing
 2. **Builds the gem** - Creates the `.gem` package using `bundle exec rake build`
 3. **Generates checksums** - Creates SHA-512 checksums for the gem package
-4. **Creates GitHub Release** - Publishes a release on GitHub with the gem and checksums as artifacts
-5. **Publishes to RubyGems** - Automatically pushes the gem to [rubygems.org](https://rubygems.org)
+4. **Publishes to RubyGems** - Uses RubyGems trusted publishing (OIDC) and pushes the gem to [rubygems.org](https://rubygems.org)
+5. **Creates GitHub Release** - Publishes a release on GitHub with the gem and checksums as artifacts, only after RubyGems publish succeeds
 
 ## Triggering a Release
 
@@ -81,6 +81,8 @@ Check that:
 - Trusted publishing is configured for `CycloneDX/cyclonedx-ruby-gem` on RubyGems.org
 - The workflow has permission to request an OIDC token
 - The gem version doesn't already exist on RubyGems (versions cannot be overwritten)
+
+If RubyGems publishing fails, the GitHub Release job will not run.
 
 ### Prerelease not detected correctly
 
