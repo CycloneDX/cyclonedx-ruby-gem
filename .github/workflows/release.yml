@@ -140,12 +140,13 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: gem-package
+        path: release-assets
 
     - name: Create GitHub Release
       run: |
         PRERELEASE_FLAG=""
-        mapfile -t GEM_FILES < <(find . -type f -name '*.gem')
-        mapfile -t CHECKSUM_FILES < <(find . -type f -name '*.sha512')
+        mapfile -t GEM_FILES < <(find release-assets -type f -name '*.gem')
+        mapfile -t CHECKSUM_FILES < <(find release-assets -type f -name '*.sha512')
         if [ "${#GEM_FILES[@]}" -eq 0 ] || [ "${#CHECKSUM_FILES[@]}" -eq 0 ]; then
           echo "::error::Expected .gem and .sha512 files from build artifact download"
           exit 1
