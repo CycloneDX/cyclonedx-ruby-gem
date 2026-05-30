@@ -148,7 +148,7 @@ jobs:
           PRERELEASE_FLAG="--prerelease"
         fi
         gh release create "${{ github.ref_name }}" \
-          *.gem *.sha512 \
+          pkg/*.gem checksums/*.sha512 \
           --title "${{ github.ref_name }}" \
           --generate-notes \
           $PRERELEASE_FLAG
