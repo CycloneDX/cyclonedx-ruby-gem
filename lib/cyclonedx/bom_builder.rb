@@ -3,6 +3,7 @@
 module Cyclonedx
   class BomBuilder
     SUPPORTED_BOM_FORMATS = %w[xml json]
+    SUPPORTED_SPEC_VERSIONS = %w[1.1 1.2 1.3 1.4 1.5 1.6 1.7]
 
     extend Cyclonedx::BomHelpers
 
@@ -10,13 +11,13 @@ module Cyclonedx
       original_working_directory = Dir.pwd
       setup(path)
       specs_list
-      bom = build_bom(@gems, @bom_output_format)
+      bom = build_bom(@gems, @bom_output_format, @spec_version)
 
       begin
         @logger.info("Changing directory to the original working directory located at #{original_working_directory}")
         Dir.chdir original_working_directory
       rescue StandardError => e
-        @logger.error("Unable to change directory the original working directory located at #{original_working_directory}. #{e.message}: #{e.backtrace.join('\n')}")
+        @logger.error("Unable to change to the original working directory located at #{original_working_directory}. #{e.message}: #{Array(e.backtrace).join("\n")}")
         abort
       end
 
@@ -24,7 +25,7 @@ module Cyclonedx
       begin
         FileUtils.mkdir_p(bom_directory) unless File.directory?(bom_directory)
       rescue StandardError => e
-        @logger.error("Unable to create the directory to hold the BOM output at #{bom_directory}. #{e.message}: #{e.backtrace.join('\n')}")
+        @logger.error("Unable to create the directory to hold the BOM output at #{bom_directory}. #{e.message}: #{Array(e.backtrace).join("\n")}")
         abort
       end
 
@@ -38,12 +39,12 @@ module Cyclonedx
           puts "#{@gems.size} gems were written to BOM located at #{@bom_file_path}"
         end
       rescue StandardError => e
-        @logger.error("Unable to write BOM to #{@bom_file_path}. #{e.message}: #{e.backtrace.join('\n')}")
+        @logger.error("Unable to write BOM to #{@bom_file_path}. #{e.message}: #{Array(e.backtrace).join("\n")}")
         abort
       end
     end
 
-    def self.setup(_path)
+    def self.setup(path)
       @options = {}
       OptionParser.new do |opts|
         opts.banner = 'Usage: cyclonedx-ruby [options]'
@@ -51,8 +52,8 @@ module Cyclonedx
         opts.on('-v', '--[no-]verbose', 'Run verbosely') do |v|
           @options[:verbose] = v
         end
-        opts.on('-p', '--path path', '(Required) Path to Ruby project directory') do |path|
-          @options[:path] = path
+        opts.on('-p', '--path path', '(Required) Path to Ruby project directory') do |proj_path_opt|
+          @options[:path] = proj_path_opt
         end
         opts.on('-o', '--output bom_file_path', '(Optional) Path to output the bom.xml file to') do |bom_file_path|
           @options[:bom_file_path] = bom_file_path
@@ -60,11 +61,17 @@ module Cyclonedx
         opts.on('-f', '--format bom_output_format', '(Optional) Output format for bom. Currently support xml (default) and json.') do |bom_output_format|
           @options[:bom_output_format] = bom_output_format
         end
+        opts.on('-s', '--spec-version version', '(Optional) CycloneDX spec version to target (default: 1.7). Supported: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7') do |spec_version|
+          @options[:spec_version] = spec_version
+        end
         opts.on_tail('-h', '--help', 'Show help message') do
           puts opts
           exit
         end
       end.parse!
+
+      # Allow passing the path as a positional arg via exe wrapper
+      @options[:path] ||= path
 
       @logger = Logger.new($stdout)
       @logger.level = if @options[:verbose]
@@ -89,11 +96,15 @@ module Cyclonedx
         abort
       end
 
+      # Normalize to an absolute project path to avoid relative path issues later
+      @project_path = File.expand_path(@options[:path])
+      @provided_path = @options[:path]
+
       begin
-        @logger.info("Changing directory to Ruby project directory located at #{@options[:path]}")
-        Dir.chdir @options[:path]
+        @logger.info("Changing directory to Ruby project directory located at #{@provided_path}")
+        Dir.chdir @project_path
       rescue StandardError => e
-        @logger.error("Unable to change directory to Ruby project directory located at #{@options[:path]}. #{e.message}: #{e.backtrace.join('\n')}")
+        @logger.error("Unable to change directory to Ruby project directory located at #{@provided_path}. #{e.message}: #{Array(e.backtrace).join("\n")}")
         abort
       end
 
@@ -106,6 +117,15 @@ module Cyclonedx
         abort
       end
 
+      # Spec version selection
+      requested_spec = @options[:spec_version] || '1.7'
+      if SUPPORTED_SPEC_VERSIONS.include?(requested_spec)
+        @spec_version = requested_spec
+      else
+        @logger.error("Unrecognized CycloneDX spec version '#{requested_spec}'. Please choose one of #{SUPPORTED_SPEC_VERSIONS}")
+        abort
+      end
+
       @bom_file_path = if @options[:bom_file_path].nil?
                          "./bom.#{@bom_output_format}"
                        else
@@ -115,13 +135,16 @@ module Cyclonedx
       @logger.info("BOM will be written to #{@bom_file_path}")
 
       begin
-        gemfile_path = "#{@options[:path]}/Gemfile.lock"
-        @logger.info("Parsing specs from #{gemfile_path}...")
+        # Use absolute path so it's correct regardless of current working directory
+        gemfile_path = File.join(@project_path, 'Gemfile.lock')
+        # Compute display path for logs: './Gemfile.lock' when provided path is '.', else '<provided>/Gemfile.lock'
+        display_gemfile_path = (@provided_path == '.' ? './Gemfile.lock' : File.join(@provided_path, 'Gemfile.lock'))
+        @logger.info("Parsing specs from #{display_gemfile_path}...")
         gemfile_contents = File.read(gemfile_path)
         @specs = Bundler::LockfileParser.new(gemfile_contents).specs
         @logger.info('Specs successfully parsed!')
       rescue StandardError => e
-        @logger.error("Unable to parse specs from #{gemfile_path}. #{e.message}: #{e.backtrace.join('\n')}")
+        @logger.error("Unable to parse specs from #{gemfile_path}. #{e.message}: #{Array(e.backtrace).join("\n")}")
         abort
       end
     end

@@ -1,7 +1,6 @@
 # Build Artifacts
 /pkg/
 /tmp/
-/checksums/
 *.gem
 
 # Bundler
@@ -12,6 +11,7 @@
 /gemfiles/.bundle/config
 /gemfiles/vendor/
 Appraisal.*.gemfile.lock
+Gemfile.lock
 
 # Specs
 .rspec_status
@@ -46,6 +46,7 @@ Appraisal.*.gemfile.lock
 
 # Editors
 *~
+/.idea/
 
 # vendor
 /vendor/

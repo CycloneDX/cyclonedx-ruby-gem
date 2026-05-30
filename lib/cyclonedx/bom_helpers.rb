@@ -29,6 +29,10 @@ module Cyclonedx
   module BomHelpers
     module_function
 
+    def cyclonedx_xml_namespace(spec_version)
+      "http://cyclonedx.org/schema/bom/#{spec_version}"
+    end
+
     def purl(name, version)
       "pkg:gem/#{name}@#{version}"
     end
@@ -37,18 +41,18 @@ module Cyclonedx
       "urn:uuid:#{SecureRandom.uuid}"
     end
 
-    def build_bom(gems, format)
+    def build_bom(gems, format, spec_version)
       if format == 'json'
-        build_json_bom(gems)
+        build_json_bom(gems, spec_version)
       else
-        build_bom_xml(gems)
+        build_bom_xml(gems, spec_version)
       end
     end
 
-    def build_json_bom(gems)
+    def build_json_bom(gems, spec_version)
       bom_hash = {
         bomFormat: 'CycloneDX',
-        specVersion: '1.1',
+        specVersion: spec_version,
         serialNumber: random_urn_uuid,
         version: 1,
         components: []
@@ -61,9 +65,9 @@ module Cyclonedx
       JSON.pretty_generate(bom_hash)
     end
 
-    def build_bom_xml(gems)
+    def build_bom_xml(gems, spec_version)
       builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
-        attributes = { 'xmlns' => 'http://cyclonedx.org/schema/bom/1.1', 'version' => '1', 'serialNumber' => random_urn_uuid }
+        attributes = { 'xmlns' => cyclonedx_xml_namespace(spec_version), 'version' => '1', 'serialNumber' => random_urn_uuid }
         xml.bom(attributes) do
           xml.components do
             gems.each do |gem|

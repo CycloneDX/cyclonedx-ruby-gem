@@ -40,4 +40,3 @@ Feature: Creating BOM using Json format
     """
     And a file named "bom.json" should exist
     And the generated Json BOM file "bom.json" matches "bom.json.expected"
-

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bom xmlns="http://cyclonedx.org/schema/bom/1.1" version="1" serialNumber="urn:uuid:ffc51349-2d7d-408e-b2c1-3e3f220e6d2f">
+<bom xmlns="http://cyclonedx.org/schema/bom/1.7" version="1" serialNumber="urn:uuid:ffc51349-2d7d-408e-b2c1-3e3f220e6d2f">
   <components>
     <component type="library">
       <name>activesupport</name>
