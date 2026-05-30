@@ -137,35 +137,19 @@ jobs:
     needs: [validate, build]
     runs-on: ubuntu-latest
     if: github.repository == 'CycloneDX/cyclonedx-ruby-gem'
+    permissions:
+      id-token: write
     steps:
-    - uses: actions/checkout@v4
-    
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: '3.3'
         bundler-cache: false
-    
-    - name: Check for RubyGems API key
-      run: |
-        if [ -z "${{ secrets.RUBYGEMS_API_KEY }}" ]; then
-          echo "::error::RUBYGEMS_API_KEY secret is not set"
-          exit 1
-        fi
-    
+
     - name: Download build artifacts
       uses: actions/download-artifact@v4
       with:
         name: gem-package
-    
+
     - name: Publish to RubyGems
-      run: |
-        mkdir -p ~/.gem
-        cat << EOF > ~/.gem/credentials
-        ---
-        :rubygems_api_key: ${RUBYGEMS_API_KEY}
-        EOF
-        chmod 0600 ~/.gem/credentials
-        gem push *.gem
-      env:
-        RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+      run: gem push *.gem

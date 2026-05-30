@@ -38,26 +38,21 @@ Prereleases are automatically detected by the workflow and marked as "prerelease
 
 The version in the tag must match the version in `lib/cyclonedx/ruby/version.rb`.
 
-## Required Secrets
+## RubyGems Trusted Publishing Setup
 
-The workflow requires the following GitHub repository secret to be configured:
+The release workflow uses RubyGems trusted publishing via GitHub Actions OIDC.
+No `RUBYGEMS_API_KEY` repository secret is required.
 
-### `RUBYGEMS_API_KEY`
+Before the first release, configure a trusted publisher for `cyclonedx-ruby` on [rubygems.org](https://rubygems.org):
 
-This is your RubyGems API key for publishing gems. To set it up:
+1. Open the gem's trusted publishing settings on RubyGems.org.
+2. Add a GitHub Actions trusted publisher for this repository:
+   - Owner: `CycloneDX`
+   - Repository: `cyclonedx-ruby-gem`
+   - Workflow file: `.github/workflows/release.yml`
+3. Save the publisher configuration on RubyGems.org.
 
-1. Generate an API key on [rubygems.org](https://rubygems.org/profile/edit):
-   - Go to your profile → Edit Profile → API Keys
-   - Create a new API key with "Push rubygem" scope
-   
-2. Add it to GitHub repository secrets:
-   - Go to repository Settings → Secrets and variables → Actions
-   - Click "New repository secret"
-   - Name: `RUBYGEMS_API_KEY`
-   - Value: Your RubyGems API key
-   - Click "Add secret"
-
-**Note**: The `publish` job only runs on the official repository (`CycloneDX/cyclonedx-ruby-gem`) to prevent accidental publishes from forks.
+**Note**: The RubyGems publishing job only runs on the official repository (`CycloneDX/cyclonedx-ruby-gem`) to prevent accidental publishes from forks.
 
 ## Release Artifacts
 
@@ -83,8 +78,8 @@ The workflow will not create a release if tests fail. Fix the failing tests and 
 ### Gem fails to publish to RubyGems
 
 Check that:
-- The `RUBYGEMS_API_KEY` secret is set correctly
-- The API key has the "Push rubygem" permission
+- Trusted publishing is configured for `CycloneDX/cyclonedx-ruby-gem` on RubyGems.org
+- The workflow has permission to request an OIDC token
 - The gem version doesn't already exist on RubyGems (versions cannot be overwritten)
 
 ### Prerelease not detected correctly
