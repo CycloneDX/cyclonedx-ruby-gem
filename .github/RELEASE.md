@@ -43,7 +43,7 @@ The version in the tag must match the version in `lib/cyclonedx/ruby/version.rb`
 The release workflow uses RubyGems trusted publishing via GitHub Actions OIDC.
 No `RUBYGEMS_API_KEY` repository secret is required.
 
-Before the first release, configure a trusted publisher for `cyclonedx-ruby` on [rubygems.org](https://rubygems.org):
+Before the first release, configure a trusted publisher for the `cyclonedx-ruby` gem on [rubygems.org](https://rubygems.org) and point it at this repository (`CycloneDX/cyclonedx-ruby-gem`):
 
 1. Open the gem's trusted publishing settings on RubyGems.org.
 2. Add a GitHub Actions trusted publisher for this repository:
