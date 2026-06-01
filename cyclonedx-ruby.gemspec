@@ -64,6 +64,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'cucumber', '>= 9.2.0', '< 11'
   spec.add_development_dependency 'aruba', '~> 2.2'
   spec.add_development_dependency 'simplecov', '~> 0.22.0'
+  spec.add_development_dependency 'simplecov-cobertura'
   spec.add_development_dependency 'rubocop',  '~> 1.54'
   spec.add_development_dependency 'stone_checksums',  '~> 1.0', '>= 1.0.3'
 end
