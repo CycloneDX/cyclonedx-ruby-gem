@@ -5,6 +5,7 @@ on:
     paths:
       - ".github/workflows/**"
   schedule:
+    # weekly workflow audit run (Saturday 00:00 UTC)
     - cron: "0 0 * * 6"
 
 permissions:

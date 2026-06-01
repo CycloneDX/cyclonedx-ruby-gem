@@ -49,6 +49,7 @@ jobs:
         uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f # v1.310.0
         with:
           ruby-version: ${{ matrix.ruby }}
+          # intentionally disabled to avoid cache poisoning risks flagged by zizmor
           bundler-cache: false
       - name: Run the default task
         run: bundle exec rake
