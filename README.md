@@ -1,13 +1,13 @@
 # CycloneDX Ruby Gem
 
-[![Gem Version](https://img.shields.io/gem/v/cyclonedx-ruby?logo=rubygems&logoColor=white)](https://rubygems.org/gems/cyclonedx-ruby)
-[![CT status](https://img.shields.io/github/actions/workflow/status/CycloneDX/cyclonedx-ruby-gem/ruby.yml?branch=master&logo=GitHub&logoColor=white)](https://github.com/CycloneDX/cyclonedx-ruby-gem/actions/workflows/ruby.yml?query=branch%3Amaster)
+[![shield_rubygems]][link_rubygems]
+[![shield_gh-workflow-test]][link_gh-workflow-test]
 [![shield_coverage]][link_codacy]
-[![License](https://img.shields.io/github/license/CycloneDX/cyclonedx-ruby-gem?logo=open%20source%20initiative&logoColor=white)][license_file]    
-[![Website](https://img.shields.io/badge/https://-cyclonedx.org-blue.svg)](https://cyclonedx.org/)
-[![Slack Invite](https://img.shields.io/badge/Slack-Join-blue?logo=slack&labelColor=393939)](https://cyclonedx.org/slack/invite)
-[![Group Discussion](https://img.shields.io/badge/discussion-groups.io-blue.svg)](https://groups.io/g/CycloneDX)
-[![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Follow)](https://twitter.com/CycloneDX_Spec)
+[![shield_license]][license_file]  
+[![shield_website]][link_website]
+[![shield_slack]][link_slack]
+[![shield_groups]][link_discussion]
+[![shield_twitter-follow]][link_twitter]
 
 ----
 
@@ -66,5 +66,18 @@ Permission to modify and redistribute is granted under the terms of the Apache 2
 
 [license_file]: https://github.com/CycloneDX/cyclonedx-ruby-gem/blob/master/LICENSE.txt
 
+[shield_rubygems]: https://img.shields.io/gem/v/cyclonedx-ruby?logo=rubygems&logoColor=white
+[shield_gh-workflow-test]: https://img.shields.io/github/actions/workflow/status/CycloneDX/cyclonedx-ruby-gem/ruby.yml?branch=master&logo=GitHub&logoColor=white "build"
 [shield_coverage]: https://img.shields.io/codacy/coverage/de2bfb229a81439b8974b5e3d0af4e1a?logo=Codacy&logoColor=white "test coverage"
+[shield_license]: https://img.shields.io/github/license/CycloneDX/cyclonedx-php-library?logo=open%20source%20initiative&logoColor=white "license"
+[shield_website]: https://img.shields.io/badge/https://-cyclonedx.org-blue.svg "homepage"
+[shield_slack]: https://img.shields.io/badge/slack-join-blue?logo=Slack&logoColor=white "slack join"
+[shield_groups]: https://img.shields.io/badge/discussion-groups.io-blue.svg "groups discussion"
+[shield_twitter-follow]: https://img.shields.io/badge/Twitter-follow-blue?logo=Twitter&logoColor=white "twitter follow"
+[link_rubygems]: https://rubygems.org/gems/cyclonedx-ruby
+[link_gh-workflow-test]: https://github.com/CycloneDX/cyclonedx-ruby-gem/actions/workflows/ruby.yml?query=branch%3Amaster
 [link_codacy]: https://app.codacy.com/gh/CycloneDX/cyclonedx-ruby-gem
+[link_website]: https://cyclonedx.org/
+[link_slack]: https://cyclonedx.org/slack/invite
+[link_discussion]: https://groups.io/g/CycloneDX
+[link_twitter]: https://twitter.com/CycloneDX_Spec
