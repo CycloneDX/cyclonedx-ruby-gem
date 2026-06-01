@@ -69,7 +69,7 @@ Permission to modify and redistribute is granted under the terms of the Apache 2
 [shield_rubygems]: https://img.shields.io/gem/v/cyclonedx-ruby?logo=rubygems&logoColor=white
 [shield_gh-workflow-test]: https://img.shields.io/github/actions/workflow/status/CycloneDX/cyclonedx-ruby-gem/ruby.yml?branch=master&logo=GitHub&logoColor=white "build"
 [shield_coverage]: https://img.shields.io/codacy/coverage/de2bfb229a81439b8974b5e3d0af4e1a?logo=Codacy&logoColor=white "test coverage"
-[shield_license]: https://img.shields.io/github/license/CycloneDX/cyclonedx-php-library?logo=open%20source%20initiative&logoColor=white "license"
+[shield_license]: https://img.shields.io/github/license/CycloneDX/cyclonedx-ruby-gem?logo=open%20source%20initiative&logoColor=white "license"
 [shield_website]: https://img.shields.io/badge/https://-cyclonedx.org-blue.svg "homepage"
 [shield_slack]: https://img.shields.io/badge/slack-join-blue?logo=Slack&logoColor=white "slack join"
 [shield_groups]: https://img.shields.io/badge/discussion-groups.io-blue.svg "groups discussion"
