@@ -18,8 +18,8 @@ unless RUBY_PLATFORM.include?('java')
   require 'simplecov'
   SimpleCov.command_name 'RSpec'
 
-  # Run simplecov by default
-  SimpleCov.start unless ENV.key? 'ARUBA_NO_COVERAGE'
+  aruba_no_coverage = ENV.fetch('ARUBA_NO_COVERAGE', 'false')
+  SimpleCov.start unless aruba_no_coverage.casecmp?('true')
 end
 # End copied from Aruba
 

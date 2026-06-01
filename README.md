@@ -2,6 +2,7 @@
 
 [![Gem Version](https://img.shields.io/gem/v/cyclonedx-ruby?logo=rubygems&logoColor=white)](https://rubygems.org/gems/cyclonedx-ruby)
 [![CT status](https://img.shields.io/github/actions/workflow/status/CycloneDX/cyclonedx-ruby-gem/ruby.yml?branch=master&logo=GitHub&logoColor=white)](https://github.com/CycloneDX/cyclonedx-ruby-gem/actions/workflows/ruby.yml?query=branch%3Amaster)
+[![shield_coverage]][link_codacy]
 [![License](https://img.shields.io/github/license/CycloneDX/cyclonedx-ruby-gem?logo=open%20source%20initiative&logoColor=white)][license_file]    
 [![Website](https://img.shields.io/badge/https://-cyclonedx.org-blue.svg)](https://cyclonedx.org/)
 [![Slack Invite](https://img.shields.io/badge/Slack-Join-blue?logo=slack&labelColor=393939)](https://cyclonedx.org/slack/invite)
@@ -64,3 +65,6 @@ CycloneDX Ruby Gem is Copyright (c) OWASP Foundation. All Rights Reserved.
 Permission to modify and redistribute is granted under the terms of the Apache 2.0 license. See the [LICENSE][license_file] file for the full license.
 
 [license_file]: https://github.com/CycloneDX/cyclonedx-ruby-gem/blob/master/LICENSE.txt
+
+[shield_coverage]: https://img.shields.io/codacy/coverage/de2bfb229a81439b8974b5e3d0af4e1a?logo=Codacy&logoColor=white "test coverage"
+[link_codacy]: https://app.codacy.com/gh/CycloneDX/cyclonedx-ruby-gem
