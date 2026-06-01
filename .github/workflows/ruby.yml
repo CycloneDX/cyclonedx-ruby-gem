@@ -6,6 +6,10 @@ on:
     tags: [ "v*" ]
   pull_request:
   workflow_dispatch:
+  schedule:
+    # schedule dayly tests, since dependencies are not intended to be locked
+    # this means: at 23:42
+    - cron: '42 23 * * *'
 
 # see https://docs.github.com/en/actions/how-tos/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-github_token
 permissions: {}
