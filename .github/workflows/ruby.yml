@@ -42,12 +42,17 @@ jobs:
       - name: Checkout Code
         # see https://github.com/actions/checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
       - name: Set up Ruby ${{ matrix.ruby }}
         # see https://github.com/ruby/setup-ruby
         uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f # v1.310.0
         with:
           ruby-version: ${{ matrix.ruby }}
-          bundler-cache: true
+          # intentionally disabled to avoid cache poisoning risks flagged by zizmor
+          bundler-cache: false
+      - name: Install Dependencies
+        run: bundle install
       - name: Run the default task
         run: bundle exec rake
       - name: Artifact coverage
