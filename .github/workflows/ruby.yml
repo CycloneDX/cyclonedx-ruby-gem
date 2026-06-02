@@ -51,10 +51,8 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           # intentionally disabled to avoid cache poisoning risks flagged by zizmor
           bundler-cache: false
-      - name: install dependencies
-        run: > 
-          bundle install 
-          --clean
+      - name: Install Dependencies
+        run: bundle install
       - name: Run the default task
         run: bundle exec rake
       - name: Artifact coverage
