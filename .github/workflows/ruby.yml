@@ -2,9 +2,10 @@ name: Ruby
 
 on:
   push:
-    branches: [ "master", "next" ]
+    branches: [ "master", "main" ]
     tags: [ "v*" ]
   pull_request:
+    branches: ['**']
   workflow_dispatch:
   schedule:
     # schedule dayly tests, since dependencies are not intended to be locked
@@ -82,7 +83,7 @@ jobs:
         ## see https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-using-secrets
         if: ${{ env.CODACY_PROJECT_TOKEN != '' }}
         # see https://github.com/codacy/codacy-coverage-reporter-action
-        uses: codacy/codacy-coverage-reporter-action@89d6c85cfafaec52c72b6c5e8b2878d33104c699 # v1
+        uses: codacy/codacy-coverage-reporter-action@89d6c85cfafaec52c72b6c5e8b2878d33104c699 # v1.3.0
         with:
           project-token: ${{ env.CODACY_PROJECT_TOKEN }}
           coverage-reports: '${{ env.TESTS_COVERAGE_ARTIFACT }}_*/coverage.xml'
