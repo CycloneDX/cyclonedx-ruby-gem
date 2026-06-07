@@ -30,10 +30,28 @@ jobs:
 
   rubygems_release:
     name: RubyGems Release
+    if: github.repository == 'CycloneDX/cyclonedx-ruby-gem'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: test
+    permissions:
+      contents: write
+      id-token: write
+    environment: release
     steps:
-      - run: echo "RubyGems publish (dummy step)"
+      - name: Checkout Code
+        # see https://github.com/actions/checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Set up Ruby
+        # see https://github.com/ruby/setup-ruby
+        uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f # v1.310.0
+        with:
+          ruby-version: ruby
+          bundler-cache: false
+      - name: "Push gem to RubyGems"
+        uses: rubygems/release-gem@6317d8d1f7e28c24d28f6eff169ea854948bd9f7 # v1.2.0
 
   github_release:
     name: GitHub Release
