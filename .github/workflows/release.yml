@@ -70,7 +70,7 @@ jobs:
           persist-credentials: false
       - name: Create GitHub Release
         run: |
-          gh release create "${{ github.ref_name }}" \
+          gh release create "$GITHUB_REF_NAME" \
             --verify-tag \
             --generate-notes
         env:
