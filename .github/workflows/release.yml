@@ -35,8 +35,8 @@ jobs:
     timeout-minutes: 10
     needs: test
     permissions:
-      contents: write
-      id-token: write
+      contents: write # Required for `rake release` to perform git synchronization.
+      id-token: write # Required for Trusted Publishing authentication.
     environment: release
     steps:
       - name: Checkout Code
