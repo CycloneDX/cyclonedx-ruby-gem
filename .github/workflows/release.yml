@@ -60,6 +60,8 @@ jobs:
     timeout-minutes: 10
     needs: rubygems_release
     environment: release
+    # Needed for `gh release create` because GitHub Releases require write access
+    # to repository contents, which is not granted by default with GITHUB_TOKEN.
     permissions:
       contents: write
     steps:
