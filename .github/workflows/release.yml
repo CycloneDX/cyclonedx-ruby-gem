@@ -51,6 +51,7 @@ jobs:
           ruby-version: ruby
           bundler-cache: false
       - name: "Push gem to RubyGems"
+        # see https://github.com/rubygems/release-gem
         uses: rubygems/release-gem@6317d8d1f7e28c24d28f6eff169ea854948bd9f7 # v1.2.0
 
   github_release:
