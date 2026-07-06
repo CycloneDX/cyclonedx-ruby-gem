@@ -73,8 +73,14 @@ jobs:
           persist-credentials: false
       - name: Create GitHub Release
         run: |
-          gh release create "$GITHUB_REF_NAME" \
-            --verify-tag \
-            --generate-notes
+          declare -a FLAGS=("--verify-tag" "--generate-notes")
+
+          # Determine release type from tag suffix
+          if [[ "$GITHUB_REF_NAME" =~ -(alpha|beta|rc|pre)[0-9.]*$ ]]; then
+            FLAGS+=("--prerelease")
+          fi
+
+          # Publish the release on GitHub with auto-generated release notes
+          gh release create "${FLAGS[@]}" -- "$GITHUB_REF_NAME"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
