@@ -4,8 +4,8 @@ on:
   push:
     tags: ["v*.*.*"]
 
-permissions:
-  contents: read
+# see https://docs.github.com/en/actions/tutorials/authenticate-with-github_token#modifying-the-permissions-for-the-github_token
+permissions: {}
 
 jobs:
   test:
