@@ -99,8 +99,8 @@ Made with [contributors-img][🖐contrib-rocks].
     - NOTE: Remember to [check the build][🧪build].
 4. Create a git tag for the gem version. Prefix the tag with 'v'. For example, if the current [gem version](https://github.com/CycloneDX/cyclonedx-ruby-gem/blob/master/lib/cyclonedx/ruby/version.rb) is 1.2.0, the tag should be 'v1.2.0'. Pre-releases are supported. See the [release workflow](https://github.com/CycloneDX/cyclonedx-ruby-gem/blob/master/.github/workflows/release.yml) for more details. Push the tag to the repository to trigger the release workflow.
 
-   > [!WARNING]
-   > The gem version and git tag MUST match. A mismatch may cause `rake release` (invoked by `rubygems/release-gem`) to create and push a tag for the gem version, which could produce unexpected results.
+> [!WARNING]
+> The gem version and git tag MUST match. A mismatch may cause `rake release` (invoked by `rubygems/release-gem`) to create and push a tag for the gem version, which could produce unexpected results.
 5. Monitor the release workflow and verify that the release completes succesfully.
 
 [📜src-gh]: https://github.com/CycloneDX/cyclonedx-ruby-gem
