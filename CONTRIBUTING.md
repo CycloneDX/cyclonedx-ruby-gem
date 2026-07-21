@@ -101,7 +101,7 @@ Made with [contributors-img][🖐contrib-rocks].
 
 > [!WARNING]
 > The gem version and git tag MUST match. A mismatch may cause `rake release` (invoked by `rubygems/release-gem`) to create and push a tag for the gem version, which could produce unexpected results.
-5. Monitor the release workflow and verify that the release completes succesfully.
+5. Monitor the release workflow and verify that the release completes successfully.
 
 [📜src-gh]: https://github.com/CycloneDX/cyclonedx-ruby-gem
 [🧪build]: https://github.com/CycloneDX/cyclonedx-ruby-gem/actions
