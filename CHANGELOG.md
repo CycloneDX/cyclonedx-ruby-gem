@@ -20,6 +20,9 @@ Please file a bug if you notice a violation of semantic versioning.
 
 ### Added
 
+- Semi-automated CI release workflow triggered by version tags (`vMAJOR.MINOR.PATCH` with optional pre-release suffixes) (#46)
+- RubyGems publishing via `rubygems_release` using trusted publishing
+- Automated GitHub Releases with generated release notes, including support for pre-releases
 - `CONTRIBUTING.md` file to help people find their way to contributing
 - `CHANGELOG.md` file to document notable changes in keep-a-changelog format
 - `Cyclonedx::BomHelpers` module to house helper methods, replacing global methods

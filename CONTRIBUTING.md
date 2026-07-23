@@ -88,36 +88,20 @@ Made with [contributors-img][🖐contrib-rocks].
 
 ### To release a new version:
 
-#### Automated process
+#### Semi-automated process
 
-Coming Soon!
-
-#### Manual process
-
-1. Run `bin/setup && bin/rake` as a "test, coverage, & linting" sanity check
-2. Update the version number in `version.rb`, and ensure `CHANGELOG.md` reflects changes
-3. Run `bin/setup && bin/rake` again as a secondary check, and to update `Gemfile.lock`
-4. Run `git commit -am "🔖 Prepare release v<VERSION>"` to commit the changes
-5. Run `git push` to trigger the final CI pipeline before release, and merge PRs
+1. Update the version number in `version.rb`, and ensure `CHANGELOG.md` reflects the changes.
+2. Commit the changes:
+   ```sh
+   git commit -am "🔖 Prepare release v<VERSION>"
+   ```
+3. Push the changes to trigger the final CI pipeline before the release.
     - NOTE: Remember to [check the build][🧪build].
-6. Run `export GIT_TRUNK_BRANCH_NAME="$(git remote show origin | grep 'HEAD branch' | cut -d ' ' -f5)" && echo $GIT_TRUNK_BRANCH_NAME`
-7. Run `git checkout $GIT_TRUNK_BRANCH_NAME`
-8. Run `git pull origin $GIT_TRUNK_BRANCH_NAME` to ensure latest trunk code
-9. Optional for older Bundler (< 2.7.0): Set `SOURCE_DATE_EPOCH` so `rake build` and `rake release` use the same timestamp and generate the same checksums
-    - If your Bundler is >= 2.7.0, you can skip this; builds are reproducible by default.
-    - Run `export SOURCE_DATE_EPOCH=$EPOCHSECONDS && echo $SOURCE_DATE_EPOCH`
-    - If the echo above has no output, then it didn't work.
-    - Note: `zsh/datetime` module is needed, if running `zsh`.
-    - In older versions of `bash` you can use `date +%s` instead, i.e. `export SOURCE_DATE_EPOCH=$(date +%s) && echo $SOURCE_DATE_EPOCH`
-10. Run `bundle exec rake build`
-11. Run `bundle exec rake release` which will create a git tag for the version,
-    push git commits and tags, and push the `.gem` file to the gem host configured in the gemspec.
-12. Run `bin/gem_checksums` (more context [1][🔒️rubygems-checksums-pr], [2][🔒️rubygems-guides-pr])
-    to create SHA-256 and SHA-512 checksums. This functionality is provided by the `stone_checksums`
-    [gem][💎stone_checksums].
-    - The script automatically commits but does not push the checksums
-13. Sanity check the SHA256, comparing with the output from the `bin/gem_checksums` command:
-    - `sha256sum pkg/<gem name>-<version>.gem`
+4. Create a git tag for the gem version. Prefix the tag with 'v'. For example, if the current [gem version](https://github.com/CycloneDX/cyclonedx-ruby-gem/blob/master/lib/cyclonedx/ruby/version.rb) is 1.2.0, the tag should be 'v1.2.0'. Pre-releases are supported. See the [release workflow](https://github.com/CycloneDX/cyclonedx-ruby-gem/blob/master/.github/workflows/release.yml) for more details. Push the tag to the repository to trigger the release workflow.
+
+> [!WARNING]
+> The gem version and git tag MUST match. A mismatch may cause `rake release` (invoked by `rubygems/release-gem`) to create and push a tag for the gem version, which could produce unexpected results.
+5. Monitor the release workflow and verify that the release completes successfully.
 
 [📜src-gh]: https://github.com/CycloneDX/cyclonedx-ruby-gem
 [🧪build]: https://github.com/CycloneDX/cyclonedx-ruby-gem/actions

@@ -1,0 +1,99 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+# see https://docs.github.com/en/actions/tutorials/authenticate-with-github_token#modifying-the-permissions-for-the-github_token
+permissions: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Code
+        # see https://github.com/actions/checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - name: Set up Ruby
+        # see https://github.com/ruby/setup-ruby
+        uses: ruby/setup-ruby@9eb537ca036ebaed86729dcb9309076e4c5c3b74 # v1.314.0
+        with:
+          ruby-version: '3.3.9'
+          bundler-cache: false
+      - name: Install Dependencies
+        run: bundle install
+      - name: Run the default task
+        run: bundle exec rake
+
+  rubygems_release:
+    name: RubyGems Release
+    if: github.repository == 'CycloneDX/cyclonedx-ruby-gem'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: test
+    permissions:
+      contents: write # Required for `rake release` to perform git synchronization.
+      id-token: write # Required for Trusted Publishing authentication.
+    environment: release
+    steps:
+      - name: Checkout Code
+        # see https://github.com/actions/checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - name: Set up Ruby
+        # see https://github.com/ruby/setup-ruby
+        uses: ruby/setup-ruby@9eb537ca036ebaed86729dcb9309076e4c5c3b74 # v1.314.0
+        with:
+          ruby-version: '3.4' # Stable environment to package the gem for the supported ruby versions
+          bundler-cache: false
+      - name: Push gem to RubyGems
+        # see https://github.com/rubygems/release-gem
+        uses: rubygems/release-gem@6317d8d1f7e28c24d28f6eff169ea854948bd9f7 # v1.2.0
+      - name: Upload gem artifact
+        # see https://github.com/actions/upload-artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a #v7.0.1
+        with:
+          name: gem
+          path: pkg/*.gem
+          retention-days: 1
+
+  github_release:
+    name: GitHub Release
+    if: github.repository == 'CycloneDX/cyclonedx-ruby-gem'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: rubygems_release
+    environment: release
+    # Needed for `gh release create` because GitHub Releases require write access
+    # to repository contents, which is not granted by default with GITHUB_TOKEN.
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code
+        # see https://github.com/actions/checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - name: Download gem artifact
+        # see https://github.com/actions/download-artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: gem
+          path: pkg
+      - name: Create GitHub Release
+        run: |
+          declare -a FLAGS=("--verify-tag" "--generate-notes")
+
+          # Determine release type from tag suffix
+          if [[ "$GITHUB_REF_NAME" =~ -(alpha|beta|rc|pre)[0-9.]*$ ]]; then
+            FLAGS+=("--prerelease")
+          fi
+
+          # Publish the release on GitHub with auto-generated release notes
+          gh release create "${FLAGS[@]}" -- "$GITHUB_REF_NAME" pkg/*.gem
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
