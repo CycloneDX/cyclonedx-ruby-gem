@@ -4,10 +4,17 @@
 
 All notable changes to this project after v1.1.0 will be documented in this file.
 
-The format is based on [Keep a Changelog][📗keep-changelog],
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html),
-and [yes][📌major-versions-not-sacred], platform and engine support are part of the [public API][📌semver-breaking].
-Please file a bug if you notice a violation of semantic versioning.
+The format is based on [Keep a Changelog][📗keep-changelog].
+
+This project follows [Semantic Versioning (SemVer)][📌semver] with one intentional convention: prerelease versions use dotted prerelease identifiers instead of the standard hyphenated form. For example:
+
+- `1.2.0.pre.1` (used by this project)
+- `1.2.0-pre.1` (standard SemVer equivalent)
+
+Aside from this prerelease notation, platform and engine support are part of the [public API][📌semver-breaking]. See [Major Version Numbers Are Not Sacred][📌major-versions-not-sacred] for additional context.
+
+
+Please file a bug if you notice a violation of this project's versioning policy.
 
 [📌semver]: https://semver.org/spec/v2.0.0.html
 [📌semver-img]: https://img.shields.io/badge/semver-2.0.0-FFDD67.svg?style=flat
@@ -20,6 +27,9 @@ Please file a bug if you notice a violation of semantic versioning.
 
 ### Added
 
+- Semi-automated CI release workflow triggered by version tags (`vMAJOR.MINOR.PATCH` with optional pre-release suffixes) (#46)
+- RubyGems publishing via `rubygems_release` using trusted publishing
+- Automated GitHub Releases with generated release notes, including support for pre-releases
 - `CONTRIBUTING.md` file to help people find their way to contributing
 - `CHANGELOG.md` file to document notable changes in keep-a-changelog format
 - `Cyclonedx::BomHelpers` module to house helper methods, replacing global methods
