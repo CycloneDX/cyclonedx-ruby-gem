@@ -28,7 +28,7 @@ RuboCop::RakeTask.new
 # coverage information reported by `simplecov` can be skewed when a `coverage`
 # directory is already present.
 desc "Run the whole test suite."
-task test: [:clobber, :spec, :cucumber]
+task test: %i[clobber spec cucumber]
 
 # Default Task
 task default: :test
