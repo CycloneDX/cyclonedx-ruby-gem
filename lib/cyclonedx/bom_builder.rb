@@ -2,8 +2,8 @@
 
 module Cyclonedx
   class BomBuilder
-    SUPPORTED_BOM_FORMATS = %w[xml json]
-    SUPPORTED_SPEC_VERSIONS = %w[1.1 1.2 1.3 1.4 1.5 1.6 1.7]
+    SUPPORTED_BOM_FORMATS = %w[xml json].freeze
+    SUPPORTED_SPEC_VERSIONS = %w[1.1 1.2 1.3 1.4 1.5 1.6 1.7].freeze
 
     extend Cyclonedx::BomHelpers
 

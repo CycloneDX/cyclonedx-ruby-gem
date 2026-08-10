@@ -67,14 +67,6 @@ Style/MixinUsage:
   Exclude:
     - 'lib/cyclonedx_deprecated.rb'
 
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: literals, strict
-Style/MutableConstant:
-  Exclude:
-    - 'lib/cyclonedx/bom_builder.rb'
-
 # Offense count: 2
 Style/OpenStructUse:
   Exclude:
