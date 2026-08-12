@@ -61,7 +61,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency('activesupport', '~> 7.0')
   spec.add_development_dependency 'rake', '~> 13'
   spec.add_development_dependency 'rspec', '~> 3.12'
-  spec.add_development_dependency 'cucumber', '>= 9.2.0', '< 11'
+  spec.add_development_dependency 'cucumber', '>= 9.2.0', '< 12'
   spec.add_development_dependency 'aruba', '~> 2.2'
   spec.add_development_dependency 'simplecov', '~> 0.22.0'
   spec.add_development_dependency 'simplecov-cobertura'
