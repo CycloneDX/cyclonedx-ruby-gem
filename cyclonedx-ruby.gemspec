@@ -54,7 +54,7 @@ Gem::Specification.new do |spec|
   # Listed files are the relative paths from bindir above.
   spec.executables = ['cyclonedx-ruby']
 
-  spec.add_dependency('json', '~> 2.6')
+  spec.add_dependency('json', '>= 2.6', '< 4.0')
   spec.add_dependency('nokogiri', '~> 1.15')
   spec.add_dependency('ostruct', '~> 0.5.5')
   spec.add_dependency('rest-client', '~> 2.0')
