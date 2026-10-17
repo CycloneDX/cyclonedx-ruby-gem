@@ -47,7 +47,7 @@ jobs:
           persist-credentials: false
       - name: Set up Ruby ${{ matrix.ruby }}
         # see https://github.com/ruby/setup-ruby
-        uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f # v1.310.0
+        uses: ruby/setup-ruby@e81a8fa391b11a595c1b7ed84177cc0fe02faf83 # v1.328.0
         with:
           ruby-version: ${{ matrix.ruby }}
           # intentionally disabled to avoid cache poisoning risks flagged by zizmor
